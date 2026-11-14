@@ -19,6 +19,10 @@ const rows = await Promise.all(
 <section class="screens" id="screens" aria-labelledby="screens-h">
   <div class="wrap sec-head">
     <h2 id="screens-h">{t(lang, 'Impressions')}</h2>
+    <p class="lede">
+      {t(lang, 'Real routes from Finland to Japan.')}{' '}
+      <a class="ext" href="https://github.com/ORQWA/ORQWA/blob/main/docs/screenshots.md" target="_blank" rel="noopener">{t(lang, 'All screenshots')}</a>
+    </p>
   </div>
   <div class="wrap reels">
     {rows.map((row, i) => (

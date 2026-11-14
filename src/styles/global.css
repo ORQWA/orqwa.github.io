@@ -231,6 +231,9 @@ html.menu-open { overflow: hidden; }
 section { padding-block: clamp(72px, 10vw, 140px) 0; scroll-margin-top: var(--bar); }
 .sec-head { display: grid; gap: 16px; margin-bottom: 40px; text-align: center; justify-items: center; }
 .sec-head .lede { margin-inline: auto; }
+/* A link at the end of a section's lede, like the guide links on the feature cards. */
+.sec-head .lede a { font-weight: 500; text-decoration: none; white-space: nowrap; }
+.sec-head .lede a:hover { text-decoration: underline; }
 .tabs { margin-inline: auto; }
 
 /* Screens: two reels as wide as the content column, each shot with a short highlight below.
@@ -247,7 +250,7 @@ section { padding-block: clamp(72px, 10vw, 140px) 0; scroll-margin-top: var(--ba
 }
 .reel::-webkit-scrollbar { display: none; }
 /* Short windows: smaller shots, so both pinned rows fit below the heading. */
-@media (max-height: 760px) { .reel { --h: clamp(150px, min(25svh, 33vw), 440px); } }
+@media (max-height: 840px) { .reel { --h: clamp(150px, min(25svh, 33vw), 440px); } }
 .reel-track {
   list-style: none; margin: 0; display: flex; gap: clamp(14px, 1.8vw, 24px); width: max-content;
   padding: 0 calc(50% - var(--h) * 8 / 9);
@@ -273,7 +276,7 @@ section { padding-block: clamp(72px, 10vw, 140px) 0; scroll-margin-top: var(--ba
 .shot.is-focus .shot-cap { color: var(--text); }
 @media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
   .js-motion .screens { padding-block: var(--section-gap) 0; }
-  .js-motion .screens .sec-head { margin-bottom: 8px; }
+  .js-motion .screens .sec-head { margin-bottom: 8px; gap: 10px; }
   .js-motion .reel { scroll-snap-type: none; }
 }
 dialog.lightbox {

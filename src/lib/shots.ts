@@ -2,15 +2,16 @@
 // ./orqwa-docs locally and checked out there in CI, so the site always shows the current app.
 import type { ImageMetadata } from 'astro';
 
-import ridePass from '../../orqwa-docs/images/road-earthworks/alpenbrevet-35750-roadside-after.jpg';
-import rideVillage from '../../orqwa-docs/images/views/oberalp-village-chase.jpg';
-import rideLakeMorning from '../../orqwa-docs/images/views/lake-morning.jpg';
-import rideDrone from '../../orqwa-docs/images/views/valley-morning.jpg';
-import rideWinter from '../../orqwa-docs/images/seasons/winter-climb.jpg';
-import rideFirstPerson from '../../orqwa-docs/images/app/ride-first-person.jpg';
-import rideLake from '../../orqwa-docs/images/ride-lake.jpg';
+import fujiEvening from '../../orqwa-docs/images/showcase/fuji-lake-evening.jpg';
+import furkaGroup from '../../orqwa-docs/images/showcase/alpenbrevet-furka-group-climb.jpg';
+import wadaHairpins from '../../orqwa-docs/images/showcase/wada-hairpin-autumn-group.jpg';
+import scheideggWinter from '../../orqwa-docs/images/showcase/grosse-scheidegg-winter-climb.jpg';
+import saimaaSunset from '../../orqwa-docs/images/showcase/saimaa-ridge-group-evening.jpg';
+import saimaaRain from '../../orqwa-docs/images/showcase/saimaa-ridge-rain-group.jpg';
+import nesqueGorge from '../../orqwa-docs/images/showcase/nesque-gorge-autumn-group.jpg';
+import fujiSpring from '../../orqwa-docs/images/showcase/fuji-lake-spring-group.jpg';
+import wadaEvening from '../../orqwa-docs/images/showcase/wada-autumn-evening.jpg';
 import videoCourse from '../../orqwa-docs/images/readme/video-course.jpg';
-import groupRiders from '../../orqwa-docs/images/groups/riders.jpg';
 import groupWindow from '../../orqwa-docs/images/groups/window.jpg';
 import overlay from '../../orqwa-docs/images/readme/overlay.jpg';
 
@@ -30,18 +31,19 @@ import lobby from '../../orqwa-docs/images/groups/lobby-en.png';
 /** caption: a short highlight shown under the shot; alt: what the image shows, for screen readers. */
 export interface Shot { src: ImageMetadata; alt: string; caption: string }
 
-/** Riding: the 3D world, video courses and the ride figures (HUD). */
+/** Riding: the showcase of saved courses (seasons, weather, times of day, alone and in groups), then the features around it. */
 export const ridingShots: Shot[] = [
-  { src: rideLake, alt: "Riding along the Bielersee in ORQWA's 3D world", caption: 'Third-person view' },
-  { src: rideFirstPerson, alt: 'Climbing above Twann seen from the rider, with power, heart rate, minimap and elevation', caption: 'First-person view' },
-  { src: rideVillage, alt: 'Riding through a mountain village on the way to the Oberalp Pass', caption: 'Mountain villages' },
-  { src: rideDrone, alt: 'A winding road over open hills in the morning light, seen from above', caption: 'Drone view' },
-  { src: ridePass, alt: 'Climbing an Alpine pass between rock faces and forest, with the next climbs on the elevation profile', caption: 'Alpine passes' },
-  { src: rideLakeMorning, alt: 'Riding along a lake in the morning light', caption: 'Morning by the lake' },
-  { src: rideWinter, alt: 'Riding up a snowy road in winter', caption: 'Every season' },
+  { src: fujiEvening, alt: "Evening sun over the lake below Mount Fuji in ORQWA's 3D world", caption: 'Evening below Mount Fuji' },
+  { src: furkaGroup, alt: 'Climbing the Furka with friends, with the HUD and the list of riders', caption: 'Group ride up the Furka' },
+  { src: wadaHairpins, alt: 'A group riding autumn hairpins in Japan, seen from above', caption: 'Autumn hairpins from above' },
+  { src: scheideggWinter, alt: 'Climbing through a snowy forest below the Wetterhorn, with the HUD', caption: 'Every season' },
+  { src: saimaaSunset, alt: 'A group on the Saimaa lake ridge at sunset, seen from above', caption: 'Saimaa at sunset' },
+  { src: saimaaRain, alt: 'Riding in the rain on the Saimaa ridge in a group ride, with the HUD', caption: 'Riding in the rain' },
+  { src: nesqueGorge, alt: 'A group above the Gorges de la Nesque in autumn evening light', caption: 'Gorges de la Nesque' },
+  { src: fujiSpring, alt: 'A group riding past cherry blossom along a lake below Mount Fuji', caption: 'Cherry blossom in spring' },
+  { src: wadaEvening, alt: 'An autumn forest and a view over the hills at evening, in Japan', caption: 'Autumn forest at evening' },
   { src: overlay, alt: "ORQWA's ride figures in a compact overlay window", caption: 'Overlay on top of any window' },
   { src: videoCourse, alt: 'Riding a video course in ORQWA', caption: 'Video course' },
-  { src: groupRiders, alt: 'Riders in a group ride, seen from behind', caption: 'Group ride with friends' },
   { src: groupWindow, alt: 'The group ride window during a ride, with the invitation, the riders and their ping, voice chat and the group workout', caption: 'Group ride window' },
 ];
 
