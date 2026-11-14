@@ -54,7 +54,7 @@ p { margin: 0; }
 code, .mono { font-family: var(--f-mono); font-size: .86em; }
 .wrap { width: 100%; max-width: var(--wrap); margin-inline: auto; padding-inline: clamp(16px, 4vw, 40px); }
 .lede { color: var(--muted); font-size: 1.15rem; max-width: 60ch; }
-.label { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+.label { font-size: 14px; color: var(--muted); font-weight: 500; }
 .skip { position: absolute; left: 12px; top: -60px; z-index: 100; background: var(--accent); color: var(--on-accent); padding: 10px 14px; border-radius: 10px; }
 .skip:focus { top: 12px; }
 
@@ -440,17 +440,22 @@ td { color: var(--muted); }
   margin-top: 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 20px;
 }
 .card { background: rgba(7, 11, 18, .6); border: 1px solid var(--line); border-radius: var(--r); padding: 28px; display: grid; gap: 20px; align-content: start; }
-.hud { display: grid; grid-template-columns: repeat(3, auto); justify-content: start; gap: 6px 36px; }
-.hud .v { font-size: 1.6rem; font-weight: 600; font-stretch: 90%; font-variant-numeric: tabular-nums; line-height: 1.1; }
-.hud .v small { font-size: 13px; color: var(--muted); font-weight: 400; margin-left: 3px; }
+.hud { display: grid; grid-template-columns: repeat(3, auto); justify-content: start; gap: 2px 36px; }
+/* Values set like the headings elsewhere. */
+.hud .v { font-size: 1.6rem; font-weight: 600; font-stretch: 86%; letter-spacing: -.02em; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.hud .v small { font-size: 13px; font-stretch: 100%; letter-spacing: 0; color: var(--muted); font-weight: 400; margin-left: 4px; }
 .file { font: 500 14px var(--f-mono); color: var(--muted); word-break: break-all; }
 .alt { display: grid; gap: 8px; font-size: 15px; }
 .alt a { text-decoration: none; }
 .alt a:hover { text-decoration: underline; }
 .alt .mono { color: var(--muted); font-size: 13px; }
 .install { counter-reset: i; list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
-.install li { counter-increment: i; display: grid; grid-template-columns: 28px 1fr; gap: 12px; color: var(--muted); }
-.install li::before { content: counter(i); font: 500 13px var(--f-mono); color: var(--accent-hi); padding-top: 2px; }
+.install li { counter-increment: i; display: grid; grid-template-columns: 26px 1fr; gap: 12px; color: var(--muted); }
+/* Numbered like the other step lists (the timeline pills), a size smaller. */
+.install li::before {
+  content: counter(i); width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center;
+  font: 500 12px var(--f-mono); color: var(--accent-hi); border: 1px solid rgba(46, 176, 255, .45);
+}
 .install b { color: var(--text); font-weight: 600; }
 .note { font-size: 14px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; }
 /* The note sits at the bottom of the install box in a space of fixed height, so its line is at
