@@ -87,7 +87,7 @@ code, .mono { font-family: var(--f-mono); font-size: .86em; }
 .brand img:first-child { width: var(--mark); height: var(--mark); }
 .brand img:last-child { height: calc(var(--mark) / 2); width: auto; }
 .nav { display: flex; align-items: center; gap: 24px; }
-.nav a { color: var(--muted); text-decoration: none; font-weight: 500; font-size: 15px; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; }
+.nav a { color: var(--muted); text-decoration: none; font-weight: 500; font-size: 15px; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; }
 .nav a:hover { color: var(--text); }
 .nav svg { width: 18px; height: 18px; }
 
@@ -106,8 +106,51 @@ code, .mono { font-family: var(--f-mono); font-size: .86em; }
   background: none; border: 1px solid var(--line); min-width: 44px; padding: 0 10px;
 }
 .lang:hover { color: var(--text); border-color: rgba(150, 190, 240, .32); }
+/* The full bar needs about 1010px in German: first the GitHub label goes, then the page links. */
+@media (max-width: 1100px) {
+  .nav .hide-m { display: none; }
+  .nav { gap: 18px; }
+}
+@media (max-width: 960px) { .nav .hide-s { display: none; } }
+
+/* Menu (narrow screens): a button in the bar, the panel drops down below it. */
+.menu-btn {
+  display: none; place-content: center; gap: 4px; flex: none; cursor: pointer;
+  width: 44px; height: var(--control); padding: 0; border-radius: 10px;
+  background: none; border: 1px solid var(--line); color: var(--text);
+}
+.menu-btn:hover { border-color: rgba(150, 190, 240, .32); }
+.menu-btn span { display: block; width: 18px; height: 2px; border-radius: 1px; background: currentColor; transition: transform .25s, opacity .2s; }
+.menu-btn[aria-expanded="true"] span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.menu-btn[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.menu-btn[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+.bar.is-open { background: rgba(7, 11, 18, .96); border-bottom-color: var(--line); }
+html.menu-open { overflow: hidden; }
+.menu { border-top: 1px solid var(--line); max-height: calc(100svh - var(--bar) - env(safe-area-inset-top, 0px)); overflow-y: auto; overscroll-behavior: contain; }
+.menu-in { display: grid; gap: 20px; padding-block: 8px 24px; }
+.menu-nav { display: grid; }
+.menu-nav a {
+  display: flex; align-items: center; gap: 8px; min-height: 52px; border-bottom: 1px solid var(--line);
+  color: var(--text); text-decoration: none; font-size: 18px; font-weight: 500; font-stretch: 92%;
+}
+.menu-nav a:hover { color: var(--accent-hi); }
+.menu-nav a[aria-current="page"] { color: var(--accent-hi); }
+.menu-nav a.ext::after { content: "↗"; font-size: 13px; opacity: .6; }
+.menu-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }
+.menu-lang { display: inline-flex; gap: 4px; padding: 4px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
+.menu-lang a { display: inline-grid; place-items: center; min-height: 36px; min-width: 44px; padding: 0 12px; border-radius: 8px; color: var(--muted); text-decoration: none; font: 600 13px var(--f-sans); letter-spacing: .06em; }
+.menu-lang a:hover { color: var(--text); }
+.menu-lang a[aria-current="true"] { background: rgba(46, 176, 255, .16); color: var(--text); }
+.menu-small { display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: 14px; }
+.menu-small a { color: var(--muted); text-decoration: none; min-height: 36px; display: inline-flex; align-items: center; }
+.menu-small a:hover, .menu-small a[aria-current="page"] { color: var(--text); }
+@media (max-width: 960px) { .menu-btn { display: inline-grid; } }
+@media (min-width: 961px) { .menu { display: none; } }
+@media (prefers-reduced-motion: no-preference) {
+  .menu:not([hidden]) { animation: menu-in .22s ease-out; }
+}
+@keyframes menu-in { from { opacity: 0; transform: translateY(-6px); } }
 @media (max-width: 760px) {
-  .nav .hide-s { display: none; }
   .brand { --mark: 26px; }
   .star-label { display: none; }
   .star-count { padding-left: 0; border-left: 0; }
@@ -117,6 +160,7 @@ code, .mono { font-family: var(--f-mono); font-size: .86em; }
 @media (max-width: 520px) {
   .brand img:last-child { display: none; }
   .nav { gap: 12px; }
+  .nav .lang { display: none; } /* in the menu */
 }
 
 /* Hero. The intro video fills the stage. Its last frame is the logo on the stage background,
@@ -145,6 +189,17 @@ code, .mono { font-family: var(--f-mono); font-size: .86em; }
   filter: drop-shadow(0 20px 60px rgba(10, 155, 245, .25));
 }
 .hero.is-playing .lockup { opacity: 0; }
+/* Narrow or short screens (phones, also in landscape): the stage is small, so the bar would cover
+   the top of the logo. The whole video, uncropped, starts below the bar instead, so the logo in its
+   last frame and the static one match exactly; the stage background still runs on under the bar. */
+@media (max-width: 760px), (max-height: 560px) {
+  .stage {
+    --top: calc(var(--bar) + env(safe-area-inset-top, 0px));
+    height: calc(56.25vw + var(--top)); min-height: 0;
+    --logo-h: calc(.5028 * 56.25cqw);
+  }
+  .stage video, .lockup-wrap { inset: var(--top) 0 0; height: auto; }
+}
 .hero.instant video { transition: none; }
 .replay {
   position: absolute; right: 16px; bottom: 16px; z-index: 2;
@@ -272,8 +327,8 @@ dialog.lightbox img { max-height: calc(92vh - 56px); width: auto; }
 }
 .steps .h3 { align-self: center; }
 .steps p { color: var(--muted); font-size: 15.5px; }
-.flow-fig { margin: 0; overflow-x: auto; }
-.flow { width: 100%; height: auto; min-width: 560px; display: block; }
+.flow-fig { margin: 0; }
+.flow { width: 100%; height: auto; display: block; }
 .flow .zone { fill: rgba(150, 190, 240, .03); stroke: var(--line); stroke-width: 1; }
 .flow .zone-label { font: 600 14px var(--f-sans); fill: var(--muted); }
 .flow .node rect { fill: var(--deep); stroke: var(--line); stroke-width: 1.5; }
@@ -308,11 +363,49 @@ dialog.lightbox img { max-height: calc(92vh - 56px); width: auto; }
 .flow .ln.dash { stroke-dasharray: 6 6; }
 .flow-fig .follow { font-size: 15px; margin-top: 18px; padding: 14px 18px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
 .flow-fig .follow b { color: var(--text); font-weight: 600; }
-@media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
   /* Keeps its own height; motion.ts pins it centred in the space below the top bar. */
   .js-motion .scene-pin { padding-block: 0; }
 }
-@media (max-width: 900px) { .scene { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 1023.98px) { .scene { grid-template-columns: minmax(0, 1fr); } }
+
+/* Phones and small tablets get their own, taller drawing of each diagram, with text sized for a
+   small screen. The wide drawing needs a column of about 560px, so it starts at 1024px. */
+.flow-m { display: none; }
+.step-dots { display: none; }
+@media (max-width: 1023.98px) {
+  .flow-d { display: none; }
+  .flow-m { display: block; min-width: 0; width: 100%; max-width: 480px; margin-inline: auto; }
+  .flow-m .n-title { font-size: 14px; font-stretch: 84%; }
+  .flow-m .n-sub, .flow-m .lbl { font-size: 11.5px; }
+  .flow-m .row { font-size: 12.5px; }
+  .flow-m .zone-label { font-size: 12px; }
+  .flow-m .pill text { font-size: 11.5px; }
+
+  /* Animated (motion.ts): the drawing fills the pinned screen and one step at a time is shown
+     below it. The figure dissolves into the grid so the step text sits right under the drawing. */
+  .scene.is-m { height: 100%; gap: 10px; grid-template-rows: minmax(0, 1fr) auto auto; align-content: stretch; }
+  .scene.is-m .flow-fig { display: contents; }
+  .scene.is-m .flow-m { order: -2; min-height: 0; height: 100%; max-width: none; }
+  .scene.is-m .steps.timeline { order: 0; display: grid; gap: 0; max-width: 520px; margin-inline: auto; width: 100%; }
+  .scene.is-m .steps.timeline li { grid-area: 1 / 1; align-self: start; opacity: 0; pointer-events: none; transition: none; will-change: opacity, transform; }
+  .scene.is-m .steps.timeline li.is-on { pointer-events: auto; }
+  .scene.is-m .steps.timeline li > * { opacity: 1; transform: none; transition: none; }
+  .scene.is-m .steps.timeline li::before { transform: none; box-shadow: none; }
+  .scene.is-m .timeline::before, .scene.is-m .timeline::after { display: none; }
+  .scene.is-m .steps.timeline .h3 { font-size: 1.15rem; }
+  .scene.is-m .steps.timeline p { font-size: 15px; line-height: 1.5; }
+  .scene.is-m .step-dots { order: 1; display: flex; justify-content: center; gap: 6px; }
+  .step-dots button { width: 44px; height: 32px; padding: 0; border: 0; background: none; cursor: pointer; display: grid; place-items: center; }
+  .step-dots button::before { content: ""; width: 22px; height: 4px; border-radius: 2px; background: var(--line); transition: background .3s, width .3s; }
+  .step-dots button[aria-current="step"]::before { width: 34px; background: var(--accent-hi); }
+  .step-dots button.c-off[aria-current="step"]::before { background: var(--ok); }
+  .step-dots button.c-sync[aria-current="step"]::before { background: #B794F6; }
+}
+@media (max-width: 1023.98px) and (prefers-reduced-motion: no-preference) {
+  .js-motion .scene-pin { height: 100svh; display: flex; padding-block: calc(var(--bar) + 10px) 10px; }
+  .js-motion .scene-pin > .scene { flex: 1; min-height: 0; }
+}
 
 
 .techies { margin-top: clamp(48px, 6vw, 72px); text-align: center; font-size: 15px; }
@@ -329,7 +422,7 @@ td { color: var(--muted); }
 
 /* Download */
 .dl { background: linear-gradient(180deg, transparent, var(--deep) 30%, var(--deep)); padding-bottom: 0; }
-.tabs { display: flex; flex-wrap: wrap; gap: 6px; padding: 5px; border: 1px solid var(--line); border-radius: 14px; width: fit-content; background: var(--panel); }
+.tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; padding: 5px; border: 1px solid var(--line); border-radius: 14px; width: fit-content; background: var(--panel); }
 .tabs button {
   font: 500 15px var(--f-sans); color: var(--muted); background: none; border: 0; border-radius: 10px;
   min-height: 42px; padding: 0 16px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
@@ -367,7 +460,9 @@ td { color: var(--muted); }
 :lang(de) .note { min-height: calc(3lh + 16px); }
 @media (max-width: 1000px) { .note { min-height: calc(3lh + 16px); } }
 .dl-more { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 28px; margin-top: 28px; font-size: 15px; }
-@media (max-width: 860px) { .panel { grid-template-columns: 1fr; } .hud { grid-template-columns: repeat(2, auto); } }
+/* The hud keeps its three columns (labels first, then values), only closer together. */
+@media (max-width: 860px) { .panel { grid-template-columns: 1fr; } .hud { gap: 6px 28px; } }
+@media (max-width: 420px) { .hud { gap: 6px 20px; } .hud .v { font-size: 1.35rem; } }
 
 /* Footer */
 footer { border-top: 1px solid var(--line); padding-block: 48px 56px; color: var(--muted); font-size: 14px; }
@@ -468,7 +563,7 @@ footer { border-top: 1px solid var(--line); padding-block: 48px 56px; color: var
 .timeline li::before { background: var(--ink); }
 .dl .timeline li::before, .first-ride .timeline li::before { background: var(--deep); }
 .how-part { padding-top: var(--section-gap); }
-@media (min-width: 901px) { .group-scene { grid-template-columns: minmax(0, 1.9fr) minmax(0, 1fr); } } /* diagram left, steps right */
+@media (min-width: 1024px) { .group-scene { grid-template-columns: minmax(0, 1.9fr) minmax(0, 1fr); } } /* diagram left, steps right */
 .flow .g-packet { fill: #B794F6; }
 .flow .g-voice { fill: none; stroke: #B794F6; stroke-width: 2; stroke-linecap: round; }
 .facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }

@@ -1,0 +1,23 @@
+---
+import { pageUrl, type Lang, type Page } from '../i18n';
+
+/** An old address that moved: sends the visitor on (keeping a #part), and search engines too. */
+interface Props { lang: Lang; page: Page }
+const { lang, page } = Astro.props;
+const to = pageUrl(lang, page);
+const canonical = new URL(to, Astro.site);
+---
+<!doctype html>
+<html lang={lang}>
+<head>
+  <meta charset="utf-8">
+  <title>ORQWA</title>
+  <meta name="robots" content="noindex">
+  <link rel="canonical" href={canonical}>
+  <meta http-equiv="refresh" content={`0; url=${to}`}>
+  <script is:inline define:vars={{ to }}>location.replace(to + location.hash);</script>
+</head>
+<body>
+  <a href={to}>{canonical.href}</a>
+</body>
+</html>

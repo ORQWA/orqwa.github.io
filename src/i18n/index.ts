@@ -23,7 +23,7 @@ export function t(lang: Lang, en: string): string {
 }
 
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
-const slugs: Record<Page, string> = { home: '', how: 'how-it-works/', download: 'download/', credits: 'credits/', privacy: 'privacy/' };
+const slugs: Record<Page, string> = { home: '', how: 'under-the-hood/', download: 'download/', credits: 'credits/', privacy: 'privacy/' };
 
 /** The URL of a page in a language, e.g. /de/download/. */
 export const pageUrl = (lang: Lang, page: Page, hash = '') =>

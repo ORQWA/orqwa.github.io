@@ -11,7 +11,7 @@ const rel = await getRelease();
 // Release values are marked with data-rel / data-asset so src/scripts/release.ts can swap in a newer release.
 const version = `<span data-rel="version">${rel.version}</span>`;
 const date = `<span data-rel="date" data-iso="${rel.date}">${formatDate(rel.date, dateLocale(lang))}</span>`;
-const heading = T('Download the app');
+const heading = T('Download the App');
 const released = T('Version 0.6.3, released 12 November 2026.')
   .replace('0.6.3', version).replace(/\d{1,2}\.? November 2026/, date);
 
@@ -62,12 +62,12 @@ const platforms = [
 ] as const;
 
 const firstRide = [
-  ['Wake your trainer', 'Turn on Bluetooth and wake your trainer by pedalling.'],
-  ['Connect it', 'Open <b>Devices</b>, press <b>Search</b> beside the trainer and wait for <b>Connected</b>.'],
-  ['Set up your profile', 'Open <b>Profile</b>, press the pencil and enter your weight, FTP (the power you can hold for about an hour) and maximum heart rate.'],
-  ['Pick a course', 'Open <b>Courses → Twann – Chasseral</b>. When it is ready, press <b>Ride</b>.'],
+  ['Wake Your Trainer', 'Turn on Bluetooth and wake your trainer by pedalling.'],
+  ['Connect It', 'Open <b>Devices</b>, press <b>Search</b> beside the trainer and wait for <b>Connected</b>.'],
+  ['Set Up Your Profile', 'Open <b>Profile</b>, press the pencil and enter your weight, FTP (the power you can hold for about an hour) and maximum heart rate.'],
+  ['Pick a Course', 'Open <b>Courses → Twann – Chasseral</b>. When it is ready, press <b>Ride</b>.'],
   ['Ride', 'Pedal to ride. <b>P</b> or space pauses, <b>S</b> opens ride settings.'],
-  ['Save your ride', 'Choose <b>Finish &amp; save</b>. Your ride appears under <b>History</b>.'],
+  ['Save Your Ride', 'Choose <b>Finish &amp; save</b>. Your ride appears under <b>History</b>.'],
 ];
 ---
 <section class="dl" id="download" aria-labelledby="dl-h">
@@ -124,7 +124,7 @@ const firstRide = [
 
 <section class="first-ride" aria-labelledby="first-h">
   <div class="wrap">
-    <div class="sec-head"><h2 id="first-h">{T('Your first ride')}</h2></div>
+    <div class="sec-head"><h2 id="first-h">{T('Your First Ride')}</h2></div>
     <ol class="steps timeline" id="first-steps">
       {firstRide.map(([title, text]) => (
         <li><h3 class="h3">{T(title)}</h3><p set:html={T(text)} /></li>

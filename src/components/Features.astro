@@ -6,36 +6,36 @@ const { lang } = Astro.props;
 const wiki = 'https://github.com/ORQWA/ORQWA/wiki/';
 
 const features = [
-  { key: 'routes', title: '3D routes', text: 'Import a route file (GPX) and ride through scenery built from real maps and landscapes.', href: wiki + 'Courses#import-a-course',
+  { key: 'routes', title: '3D Routes', text: 'Import a route file (GPX) and ride through scenery built from real maps and landscapes.', href: wiki + 'Courses#import-a-course',
     icon: '<path d="M2 20 9 8l4 6 3-4 6 10z"/><path d="M7.5 13.5 9 12l1.5 1.5"/>' },
-  { key: 'video', title: 'Video rides', text: 'Ride along a video that plays at your speed.', href: wiki + 'Video-courses',
+  { key: 'video', title: 'Video Rides', text: 'Ride along a video that plays at your speed.', href: wiki + 'Video-courses',
     icon: '<rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M10 9.2v5.6l4.8-2.8z"/>' },
-  { key: 'continue', title: 'Continue another day', text: 'Save your place in a solo course and continue later with a fresh activity.', href: wiki + 'Courses#continue-another-day',
+  { key: 'continue', title: 'Continue Another Day', text: 'Save your place in a solo course and continue later with a fresh activity.', href: wiki + 'Courses#continue-another-day',
     icon: '<path d="M7 3h10v18l-5-4-5 4z"/>' },
-  { key: 'group', title: 'Group rides', text: 'Ride with up to eight people, talk over voice chat and choose the next ride together in the lobby.', href: wiki + 'Group-rides',
+  { key: 'group', title: 'Group Rides', text: 'Ride with up to eight people, talk over voice chat and choose the next ride together in the lobby.', href: wiki + 'Group-rides',
     icon: '<circle cx="9" cy="8" r="3.2"/><circle cx="17.5" cy="9" r="2.5"/><path d="M3 20c0-3.6 2.7-6 6-6s6 2.4 6 6M15.5 14.3c3 0 5.5 2 5.5 5.7"/>' },
   { key: 'workouts', title: 'Workouts', text: 'Import or create workouts, train to power or heart-rate targets, and take fitness tests.', href: wiki + 'Workouts',
     icon: '<path d="M3 20h18"/><rect x="4" y="13" width="3" height="7"/><rect x="9" y="7" width="3" height="13"/><rect x="14" y="10" width="3" height="10"/><rect x="19" y="15" width="2" height="5"/>' },
-  { key: 'sensors', title: 'Trainers and sensors', text: 'Connect Bluetooth smart trainers, power meters, cadence sensors and heart-rate straps.', href: wiki + 'Devices-and-riding#devices',
+  { key: 'sensors', title: 'Trainers and Sensors', text: 'Connect Bluetooth smart trainers, power meters, cadence sensors and heart-rate straps.', href: wiki + 'Devices-and-riding#devices',
     icon: '<path d="m7 7 10 10-5 4V3l5 4L7 17"/>' },
-  { key: 'gears', title: 'Virtual gears', text: 'Shift with a keyboard, a compatible shifter or your phone.', href: wiki + 'Devices-and-riding#virtual-gears',
+  { key: 'gears', title: 'Virtual Gears', text: 'Shift with a keyboard, a compatible shifter or your phone.', href: wiki + 'Devices-and-riding#virtual-gears',
     icon: '<circle cx="12" cy="12" r="8.5" stroke-dasharray="2.6 1.85"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4"/>' },
-  { key: 'ghosts', title: 'Ghosts and pacers', text: 'Ride against one of your earlier activities or follow a pacer.', href: wiki + 'Ghosts-and-pacers',
+  { key: 'ghosts', title: 'Ghosts and Pacers', text: 'Ride against one of your earlier activities or follow a pacer.', href: wiki + 'Ghosts-and-pacers',
     icon: '<path d="M5 21V11a7 7 0 0 1 14 0v10l-2.4-1.8-2.3 1.8-2.3-1.8-2.3 1.8-2.3-1.8z"/><circle cx="9.5" cy="11" r=".6"/><circle cx="14.5" cy="11" r=".6"/>' },
-  { key: 'history', title: 'Ride history', text: 'Review your rides and records, and upload them to Strava or intervals.icu.', href: wiki + 'Ride-history',
+  { key: 'history', title: 'Ride History', text: 'Review your rides and records, and upload them to Strava or intervals.icu.', href: wiki + 'Ride-history',
     icon: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 2"/>' },
   { key: 'analysis', title: 'Analysis', text: 'Follow your power curve, fitness and weekly training across all saved rides.', href: wiki + 'Analysis',
     icon: '<path d="M3 3v18h18"/><path d="M7 16c2-6 4-8 6-8s3 3 7 3"/>' },
   { key: 'overlay', title: 'Overlay', text: 'Keep your ride figures over other windows on macOS, Windows and Linux, or in picture-in-picture on Android.', href: wiki + 'Overlay',
     icon: '<rect x="2.5" y="4" width="19" height="13" rx="2"/><rect x="12" y="10" width="9.5" height="9" rx="1.6" style="fill: var(--ink)"/>' },
-  { key: 'offline', title: 'Offline riding', text: 'Ride prepared courses without an internet connection.', href: pageUrl(lang, 'how'), local: true,
+  { key: 'offline', title: 'Offline Riding', text: 'Ride prepared courses without an internet connection.', href: pageUrl(lang, 'how'), local: true,
     icon: '<path d="M2 8.8a15 15 0 0 1 20 0M5.2 12.3a10.5 10.5 0 0 1 13.6 0M8.6 15.7a5.5 5.5 0 0 1 6.8 0"/><circle cx="12" cy="19.4" r=".9"/><path d="m3 3 18 18"/>' },
 ];
 const byKey = Object.fromEntries(features.map((f) => [f.key, f]));
 const groups = [
   { title: 'Ride', keys: ['routes', 'video', 'group', 'overlay'] },
   { title: 'Train', keys: ['workouts', 'ghosts', 'gears', 'sensors'] },
-  { title: 'Your rides', keys: ['continue', 'history', 'analysis', 'offline'] },
+  { title: 'Your Rides', keys: ['continue', 'history', 'analysis', 'offline'] },
 ];
 const extIcon = '<path d="M14 4h6v6M10 14 20 4M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>';
 ---
