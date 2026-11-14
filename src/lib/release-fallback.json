@@ -1,0 +1,47 @@
+{
+ "version": "0.6.3",
+ "date": "2026-11-12T20:19:50Z",
+ "url": "https://github.com/ORQWA/ORQWA/releases/tag/v0.6.3",
+ "assets": {
+  "ORQWA-0.6.3-android-arm64.apk": {
+   "size": 166517983,
+   "url": "https://github.com/ORQWA/ORQWA/releases/download/v0.6.3/ORQWA-0.6.3-android-arm64.apk"
+  },
+  "ORQWA-0.6.3-linux-arm64.tar.gz": {
+   "size": 119154210,
+   "url": "https://github.com/ORQWA/ORQWA/releases/download/v0.6.3/ORQWA-0.6.3-linux-arm64.tar.gz"
+  },
+  "ORQWA-0.6.3-linux-x86_64.tar.gz": {
+   "size": 97791064,
+   "url": "https://github.com/ORQWA/ORQWA/releases/download/v0.6.3/ORQWA-0.6.3-linux-x86_64.tar.gz"
+  },
+  "ORQWA-0.6.3-macos-arm64.zip": {
+   "size": 128001706,
+   "url": "https://github.com/ORQWA/ORQWA/releases/download/v0.6.3/ORQWA-0.6.3-macos-arm64.zip"
+  },
+  "ORQWA-0.6.3-windows-x86_64.msi": {
+   "size": 249765888,
+   "url": "https://github.com/ORQWA/ORQWA/releases/download/v0.6.3/ORQWA-0.6.3-windows-x86_64.msi"
+  },
+  "ORQWA-0.6.3-windows-x86_64.zip": {
+   "size": 106070093,
+   "url": "https://github.com/ORQWA/ORQWA/releases/download/v0.6.3/ORQWA-0.6.3-windows-x86_64.zip"
+  },
+  "orqwa-cli-0.6.3-linux-arm64.tar.gz": {
+   "size": 17619599,
+   "url": "https://github.com/ORQWA/ORQWA/releases/download/v0.6.3/orqwa-cli-0.6.3-linux-arm64.tar.gz"
+  },
+  "orqwa-cli-0.6.3-linux-x86_64.tar.gz": {
+   "size": 18464542,
+   "url": "https://github.com/ORQWA/ORQWA/releases/download/v0.6.3/orqwa-cli-0.6.3-linux-x86_64.tar.gz"
+  },
+  "orqwa-cli-0.6.3-macos-arm64.tar.gz": {
+   "size": 16141614,
+   "url": "https://github.com/ORQWA/ORQWA/releases/download/v0.6.3/orqwa-cli-0.6.3-macos-arm64.tar.gz"
+  },
+  "orqwa-cli-0.6.3-windows-x86_64.zip": {
+   "size": 16587743,
+   "url": "https://github.com/ORQWA/ORQWA/releases/download/v0.6.3/orqwa-cli-0.6.3-windows-x86_64.zip"
+  }
+ }
+}

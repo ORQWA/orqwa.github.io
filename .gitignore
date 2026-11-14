@@ -1,0 +1,5 @@
+node_modules/
+dist/
+.astro/
+orqwa-docs
+.DS_Store

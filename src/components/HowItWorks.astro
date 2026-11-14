@@ -1,0 +1,153 @@
+---
+import { t, asset, type Lang } from '../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const T = (en: string) => t(lang, en);
+const mark = asset('brand/mark.svg');
+const wordmark = asset('brand/wordmark.svg');
+const servers = 'https://github.com/ORQWA/ORQWA/wiki/Getting-started#when-orqwa-needs-the-internet';
+const sync = 'https://github.com/ORQWA/ORQWA/wiki/Syncing-between-devices';
+const ext = { target: '_blank', rel: 'noopener' };
+---
+<section id="how" aria-labelledby="how-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <h1 id="how-h">{T('How it works')}</h1>
+      <p class="lede">{T('Learn how ORQWA handles your data and uses the internet.')}</p>
+    </div>
+    <div class="how-part">
+      <div class="sec-head"><h2>{T('Offline, and yours')}</h2></div>
+      <div class="facts">
+        <div class="fact"><span class="chip off">{T('works offline')}</span><p>{T('Riding saved routes in 3D or as video, trainers and sensors over Bluetooth, workouts and fitness tests, history and analysis, and any course file a friend sends you.')}</p></div>
+        <div class="fact"><span class="chip on">{T('needs internet')}</span><p>{T('Internet is only needed for route import, rider discovery, uploads, and updates. Group rides use peer-to-peer connections. Everything else works offline.')}</p><a class="ext" href={servers} {...ext}>{T('Which services are used, and why')}</a></div>
+        <div class="fact"><span class="chip sync">{T('your data')}</span><p>{T('Your rides and routes stay on your device. Syncing and group rides use your own connections, without relying on any specific online service.')}</p><a class="ext" href={sync} {...ext}>{T('Where to find your data and how to sync it')}</a></div>
+      </div>
+    </div>
+
+  </div>
+  <!-- The steps drive the diagram while the scene is pinned (src/scripts/motion.ts). The pills
+       are coloured like the lines they explain: blue online, green on your device, purple sync. -->
+  <div class="wrap how-part solo-head"><div class="sec-head"><h2>{T('Solo rides')}</h2></div></div>
+  <div class="scene-pin" id="scene-pin">
+    <div class="wrap scene" id="scene">
+      <ol class="steps timeline" id="steps">
+        <li class="c-on"><h2 class="h3">{T('Add a route')}</h2><p>{T('When you import a GPX file, ORQWA downloads the map and the landscape around your route. This is the only step that needs internet.')}</p></li>
+        <li class="c-off"><h2 class="h3">{T('Saved on your device')}</h2><p>{T('ORQWA saves the route, map and landscape together in a single course file. You can keep a copy or share it with friends.')}</p></li>
+        <li class="c-off"><h2 class="h3">{T('Ride without internet')}</h2><p>{T('When you start a ride, ORQWA builds the 3D world from that file. Your trainer and sensors connect directly over Bluetooth.')}</p></li>
+        <li class="c-off"><h2 class="h3">{T('Your rides stay with you')}</h2><p>{T('Every ride you finish is saved on your device, not on a server. If you like, connect Strava or intervals.icu to upload your rides there.')}</p></li>
+        <li class="c-sync"><h2 class="h3">{T('On all your devices')}</h2><p>{T('Keep your rides and routes in sync across computers and tablets with any file-syncing app you like, such as Nextcloud.')}</p></li>
+      </ol>
+      <figure class="flow-fig">
+        <svg class="flow" id="flow" viewBox="0 0 900 720" role="img" aria-labelledby="flow-t flow-d">
+          <title id="flow-t">{T('How a route gets onto your device')}</title>
+          <desc id="flow-d">{T('When you add a route, ORQWA downloads the map and landscape once and saves them with the route in a course file. When you ride, ORQWA opens that file and connects to your trainer over Bluetooth, without internet.')}</desc>
+
+          <g id="net-zone">
+            <rect class="zone" x="10" y="10" width="880" height="170" rx="18"/>
+            <text class="zone-label" x="34" y="42">{T('Internet')}</text>
+            <g class="node"><rect x="140" y="66" width="240" height="72" rx="14"/><text class="n-title" x="162" y="97">{T('Map service')}</text><text class="n-sub" x="162" y="120">{T('streets and paths')}</text></g>
+            <g class="node"><rect x="520" y="66" width="240" height="72" rx="14"/><text class="n-title" x="542" y="97">{T('Landscape service')}</text><text class="n-sub" x="542" y="120">{T('hills and valleys')}</text></g>
+          </g>
+
+          <rect class="zone" x="10" y="220" width="880" height="340" rx="18"/>
+          <text class="zone-label" x="34" y="252">{T('Your device')}</text>
+
+          <g id="net-links">
+            <line class="ln on" data-draw x1="260" y1="138" x2="410" y2="290" pathLength="1"/>
+            <polygon class="ah on" points="410,290 399.4,286.4 406.5,279.4"/>
+            <line class="ln on" data-draw x1="640" y1="138" x2="490" y2="290" pathLength="1"/>
+            <polygon class="ah on" points="490,290 493.5,279.4 500.6,286.4"/>
+          </g>
+          {[260, 260, 260, 640, 640, 640].map((cx) => <circle class="packet" r="5" cx={cx} cy="138" opacity="0"/>)}
+
+          <g class="pill">
+            <rect x="350" y="186" width="200" height="30" rx="15"/>
+            <text class="a" id="pill-a" x="450" y="206">{T('only when importing')}</text>
+            <text class="b" id="pill-b" x="450" y="206" opacity="0">{T('not needed to ride')}</text>
+          </g>
+
+          <g class="node"><rect x="40" y="300" width="170" height="68" rx="14"/><text class="n-title" x="60" y="329">{T('Your route')}</text><text class="n-sub" x="60" y="352">{T('GPX file or video')}</text></g>
+          <g class="node app"><rect x="340" y="290" width="220" height="88" rx="14"/><image href={mark} x="360" y="302" width="28" height="28"/><image href={wordmark} x="396" y="309" width="78" height="14"/><title>ORQWA</title><text class="n-sub" id="sub-a" x="362" y="352">{T('downloads the map')}</text><text class="n-sub" id="sub-b" x="362" y="352" opacity="0">{T('builds the 3D world')}</text></g>
+          <g class="node file"><rect x="670" y="266" width="200" height="144" rx="14"/>
+            <text class="n-title" x="690" y="296">{T('Course file')}</text>
+            <line class="rule" x1="690" y1="310" x2="850" y2="310"/>
+            <text class="row chip" x="690" y="338">{T('route')}</text>
+            <text class="row chip" x="690" y="362">{T('map')}</text>
+            <text class="row chip" x="690" y="386">{T('landscape')}</text>
+          </g>
+          <g id="rides-node" class="node file"><rect x="40" y="440" width="190" height="68" rx="14"/><text class="n-title" x="60" y="469">{T('Your rides')}</text><text class="n-sub" x="60" y="492">{T('saved on your device')}</text></g>
+          <g id="l-ride"><line class="ln off" data-draw x1="340" y1="372" x2="232" y2="446" pathLength="1"/><polygon class="ah off" points="232,446 239.6,437.6 245.2,445.9"/><text class="lbl" x="250" y="402" text-anchor="middle">{T('saves')}</text></g>
+          <g id="sync-zone">
+            <rect class="zone" x="10" y="600" width="880" height="110" rx="18"/>
+            <text class="zone-label" x="34" y="632">{T('Your other devices')}</text>
+            <g class="node sync"><rect x="300" y="622" width="300" height="68" rx="14"/><text class="n-title" x="320" y="651">{T('Laptop, tablet, …')}</text><text class="n-sub" x="320" y="674">{T('same rides and routes')}</text></g>
+          </g>
+          <g id="l-sync"><line class="ln sync" data-draw x1="135" y1="508" x2="300" y2="656" pathLength="1"/><polygon class="ah sync" points="300,656 289.2,653.0 295.9,645.6"/><polygon class="ah sync" points="135,508 139.1,518.4 145.8,511.0"/><line class="ln sync" data-draw x1="770" y1="410" x2="600" y2="656" pathLength="1"/><polygon class="ah sync" points="600,656 601.6,644.9 609.8,650.6"/><polygon class="ah sync" points="770,410 760.2,415.4 768.4,421.1"/><g class="pill lbl"><rect x="350" y="566" width="200" height="30" rx="15"/><text class="s" x="450" y="586">{T('sync app of your choice')}</text></g></g>
+          <g class="node"><rect x="340" y="462" width="220" height="68" rx="14"/><text class="n-title" x="362" y="491" set:html={T('Trainer &amp; sensors')} /><text class="n-sub" x="362" y="514">{T('heart rate, cadence, shifter')}</text></g>
+
+          <g id="l-gpx"><line class="ln on" data-draw x1="210" y1="334" x2="340" y2="334" pathLength="1"/><polygon class="ah on" points="340,334 330,329 330,339"/><text class="lbl" x="275" y="324" text-anchor="middle">{T('import')}</text></g>
+          <g id="l-write"><line class="ln on" data-draw x1="560" y1="316" x2="670" y2="316" pathLength="1"/><polygon class="ah on" points="670,316 660,311 660,321"/><text class="lbl" x="615" y="306" text-anchor="middle">{T('saves')}</text></g>
+          <g id="l-read"><line class="ln off" data-draw x1="670" y1="352" x2="560" y2="352" pathLength="1"/><polygon class="ah off" points="560,352 570,347 570,357"/><text class="lbl" x="615" y="372" text-anchor="middle">{T('opens')}</text></g>
+          <g id="l-bt"><line class="ln off" data-draw x1="450" y1="378" x2="450" y2="462" pathLength="1"/><polygon class="ah off" points="450,378 445,388 455,388"/><polygon class="ah off" points="450,462 445,452 455,452"/><text class="lbl" x="462" y="424">Bluetooth</text></g>
+        </svg>
+      </figure>
+    </div>
+  </div>
+
+
+  <div class="wrap how-part solo-head"><div class="sec-head">
+    <h2>{T('Group rides')}</h2>
+    <p class="lede">{T('Ride together with up to eight riders, wherever they are. Group rides need an internet connection.')}</p>
+  </div></div>
+  <!-- Built like the solo scene, mirrored: diagram left, steps right (src/scripts/motion.ts). -->
+  <div class="scene-pin" id="group-pin">
+    <div class="wrap scene group-scene" id="group-scene">
+      <figure class="flow-fig">
+        <svg class="flow gflow" id="gflow" viewBox="0 0 900 560" role="img" aria-labelledby="gflow-t gflow-d">
+          <title id="gflow-t">{T('How a group ride connects')}</title>
+          <desc id="gflow-d">{T("Each rider's ORQWA asks a public address service where it can be reached on the internet. Friends join with invitation codes and connect directly to the organizer, who shares the course and passes position, power and voice on to everyone. There is no ORQWA server.")}</desc>
+          <g id="g-net-zone">
+            <rect class="zone" x="10" y="10" width="880" height="100" rx="18"/>
+            <text class="zone-label" x="34" y="40">{T('Internet')}</text>
+            <g class="node"><rect x="330" y="28" width="240" height="62" rx="14"/><text class="n-title" x="352" y="55">{T('Address service')}</text><text class="n-sub" x="352" y="77">{T('finds your internet address')}</text></g>
+          </g>
+          <rect class="zone" x="10" y="150" width="880" height="400" rx="18"/>
+          <text class="zone-label" x="34" y="180">{T('Riders at home')}</text>
+          <!-- Every rider asks the address service, in both directions: a question and an answer. -->
+          <g id="g-stun"><line class="ln on" data-draw x1="450" y1="322" x2="450" y2="90" pathLength="1"/><polygon class="ah on" points="450,90 455.0,100.0 445.0,100.0"/><polygon class="ah on" points="450,322 445.0,312.0 455.0,312.0"/><line class="ln on" data-draw x1="200" y1="210" x2="330" y2="90" pathLength="1"/><polygon class="ah on" points="330,90 326.0,100.5 319.3,93.1"/><polygon class="ah on" points="200,210 204.0,199.5 210.7,206.9"/><line class="ln on" data-draw x1="200" y1="450" x2="345" y2="90" pathLength="1"/><polygon class="ah on" points="345,90 345.9,101.1 336.6,97.4"/><polygon class="ah on" points="200,450 199.1,438.9 208.4,442.6"/><line class="ln on" data-draw x1="700" y1="210" x2="570" y2="90" pathLength="1"/><polygon class="ah on" points="570,90 580.7,93.1 574.0,100.5"/><polygon class="ah on" points="700,210 689.3,206.9 696.0,199.5"/><line class="ln on" data-draw x1="700" y1="450" x2="555" y2="90" pathLength="1"/><polygon class="ah on" points="555,90 563.4,97.4 554.1,101.1"/><polygon class="ah on" points="700,450 691.6,442.6 700.9,438.9"/></g>
+          <g class="pill">
+            <rect x="350" y="116" width="200" height="30" rx="15"/>
+            <text class="a" id="g-pill-a" x="450" y="136">{T('to find each other')}</text>
+            <text class="s" id="g-pill-b" x="450" y="136" opacity="0">{T('not needed to ride')}</text>
+          </g>
+          <g id="g-links">
+            <line class="ln sync" data-draw x1="349.1" y1="326.1" x2="245.9" y2="269.9" pathLength="1"/>
+            <line class="ln sync" data-draw x1="550.9" y1="326.1" x2="654.1" y2="269.9" pathLength="1"/>
+            <line class="ln sync" data-draw x1="349.1" y1="397.9" x2="245.9" y2="454.1" pathLength="1"/>
+            <line class="ln sync" data-draw x1="550.9" y1="397.9" x2="654.1" y2="454.1" pathLength="1"/>
+          </g>
+          <circle class="g-packet" r="6" cx="349.1" cy="326.1" data-x1="349.1" data-y1="326.1" data-x2="245.9" data-y2="269.9" opacity="0"/>
+          <circle class="g-packet" r="6" cx="550.9" cy="326.1" data-x1="550.9" data-y1="326.1" data-x2="654.1" data-y2="269.9" opacity="0"/>
+          <circle class="g-packet" r="6" cx="349.1" cy="397.9" data-x1="349.1" data-y1="397.9" data-x2="245.9" data-y2="454.1" opacity="0"/>
+          <circle class="g-packet" r="6" cx="550.9" cy="397.9" data-x1="550.9" data-y1="397.9" data-x2="654.1" data-y2="454.1" opacity="0"/>
+          <g class="pill" id="g-data">
+            <rect x="335" y="416" width="230" height="30" rx="15"/>
+            <text class="s" x="450" y="436">{T('position · power · voice')}</text>
+          </g>
+          <g class="node organizer"><rect x="345" y="322" width="210" height="80" rx="14"/><image href={mark} x="361" y="348" width="28" height="28"/><text class="n-title" x="399" y="359">{T('Organizer')}</text><text class="n-sub" id="g-sub-a" x="399" y="380">{T('hosts the ride')}</text><text class="n-sub" id="g-sub-b" x="399" y="380" opacity="0">{T('shares the course')}</text><path class="g-voice" d="M529 336v12M534 333v18M539 337v10"/></g>
+          <g class="node rider g-friend"><rect x="60" y="210" width="190" height="64" rx="14"/><image href={mark} x="76" y="228" width="28" height="28"/><text class="n-title" x="114" y="239">{T('Friend')}</text><text class="n-sub" x="114" y="260">{T('in another city')}</text><path class="g-voice" d="M224 224v12M229 221v18M234 225v10"/></g>
+          <g class="node rider g-friend"><rect x="650" y="210" width="190" height="64" rx="14"/><image href={mark} x="666" y="228" width="28" height="28"/><text class="n-title" x="704" y="239">{T('Friend')}</text><text class="n-sub" x="704" y="260">{T('next door')}</text><path class="g-voice" d="M814 224v12M819 221v18M824 225v10"/></g>
+          <g class="node rider g-friend"><rect x="60" y="450" width="190" height="64" rx="14"/><image href={mark} x="76" y="468" width="28" height="28"/><text class="n-title" x="114" y="479">{T('Friend')}</text><text class="n-sub" x="114" y="500">{T('abroad')}</text><path class="g-voice" d="M224 464v12M229 461v18M234 465v10"/></g>
+          <g class="node rider g-friend"><rect x="650" y="450" width="190" height="64" rx="14"/><image href={mark} x="666" y="468" width="28" height="28"/><text class="n-title" x="704" y="479">{T('Friend')}</text><text class="n-sub" x="704" y="500">{T('down the street')}</text><path class="g-voice" d="M814 464v12M819 461v18M824 465v10"/></g>
+        </svg>
+      </figure>
+      <ol class="steps timeline" id="group-steps">
+        <li class="c-on"><h3 class="h3">{T('Find each other')}</h3><p>{T("ORQWA asks a public address service where your device can be reached on the internet, so the others can connect to you. Nothing else is sent there.")}</p></li>
+        <li class="c-sync"><h3 class="h3">{T('Invite friends')}</h3><p>{T('Exchange invitation and reply codes by chat or email. They contain the addresses that were just found, so each friend can connect straight to the organizer, without any server in between.')}</p></li>
+        <li class="c-sync"><h3 class="h3">{T('Share the course')}</h3><p>{T('The organizer shares a prepared course or a workout. It downloads directly from the organizer to everyone and stays in their library.')}</p></li>
+        <li class="c-sync"><h3 class="h3">{T('Ride and talk together')}</h3><p>{T('Position, power and voice go through the organizer to everyone, so you see and hear each other on the road.')}</p></li>
+      </ol>
+    </div>
+  </div>
+</section>

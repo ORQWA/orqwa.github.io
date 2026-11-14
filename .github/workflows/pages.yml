@@ -1,0 +1,59 @@
+name: Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  # Sent by ORQWA's CI when it publishes a release (see README), so download links update at once.
+  repository_dispatch:
+    types: [orqwa-release]
+  # Picks up new screenshots from the ORQWA repository, and releases if the dispatch is missing.
+  schedule:
+    - cron: '17 4 * * *'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check out ORQWA's screenshots
+        uses: actions/checkout@v4
+        with:
+          repository: ORQWA/ORQWA
+          path: orqwa-src
+          sparse-checkout: docs/images
+      - run: ln -s orqwa-src/docs orqwa-docs
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - id: pages
+        uses: actions/configure-pages@v5
+      - run: npm ci
+      - run: npm run build
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          SITE_URL: ${{ steps.pages.outputs.origin }}
+          BASE_PATH: ${{ steps.pages.outputs.base_path || '/' }}
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-24.04
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

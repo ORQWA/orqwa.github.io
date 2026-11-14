@@ -1,0 +1,48 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Features from '../components/Features.astro';
+import Screens from '../components/Screens.astro';
+import { t, pageUrl, type Lang } from '../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const T = (en: string) => t(lang, en);
+---
+<Base lang={lang} page="home" title={lang === 'de' ? 'ORQWA – kostenlose Indoor-Cycling-App' : 'ORQWA'}
+  description={T('ORQWA is a free indoor cycling app. Import a route or a ride video and ride it on your smart trainer.')}>
+  <Hero slot="hero" lang={lang} />
+  <Features lang={lang} />
+  <Screens lang={lang} />
+  <section class="next-steps" aria-labelledby="next-h">
+    <div class="wrap">
+      <div class="sec-head"><h2 id="next-h">{T('Get started')}</h2></div>
+      <div class="next">
+        <a class="feat next-item" href={pageUrl(lang, 'how')}>
+          <svg class="next-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/></svg>
+          <span class="next-text">
+            <span class="next-title">{T('How it works')}</span>
+            <span class="next-line">{T('How your data is handled and when the internet is used.')}</span>
+          </span>
+          <span class="next-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span>
+        </a>
+        <a class="feat next-item" href="https://github.com/ORQWA/ORQWA/wiki" target="_blank" rel="noopener">
+          <svg class="next-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5M8 7.5h8M8 11h6"/></svg>
+          <span class="next-text">
+            <span class="next-title">{T('User guide')}</span>
+            <span class="next-line">{T('Detailed instructions for setting up and using the app.')}</span>
+          </span>
+          <span class="next-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M10 14 20 4M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg></span>
+        </a>
+        <a class="feat next-item is-primary" href={pageUrl(lang, 'download')}>
+          <svg class="next-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>
+          <span class="next-text">
+            <span class="next-title">{T('Download')}</span>
+            <span class="next-line">{T('For macOS, Windows, Linux and Android tablets. Free and open source.')}</span>
+          </span>
+          <span class="next-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span>
+        </a>
+      </div>
+    </div>
+  </section>
+</Base>

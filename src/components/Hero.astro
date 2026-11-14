@@ -1,0 +1,33 @@
+---
+import { t, pageUrl, asset, type Lang } from '../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const label = (os: string) => t(lang, `Download for ${os}`);
+---
+<header class="hero" id="top">
+  <div class="stage" id="stage">
+    <video id="teaser" src={asset('media/intro.mp4')} muted playsinline preload="auto" aria-hidden="true"></video>
+    <div class="lockup-wrap" id="lockup-wrap">
+      <img class="lockup" src={asset('brand/lockup.svg')} alt="ORQWA" width="612" height="748">
+    </div>
+    <button class="replay" id="replay" type="button" hidden>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+      {t(lang, 'Replay intro')}
+    </button>
+  </div>
+  <div class="wrap hero-copy">
+    <div>
+      <h1>{t(lang, 'Make waves with watts, not payments')}</h1>
+      <p class="lede">{t(lang, 'ORQWA is a free, open-source indoor cycling app. Import a route file (GPX) or a ride video and ride it on your smart trainer, through a 3D world or along the video, alone or with friends.')}</p>
+    </div>
+    <div class="hero-actions">
+      <a class="btn btn-primary" id="hero-dl" href={pageUrl(lang, 'download')}
+        data-macos={label('macOS')} data-windows={label('Windows')} data-linux={label('Linux')} data-android={label('Android')}>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v12M6 10l6 6 6-6M5 20h14"/></svg>
+        <span>{t(lang, 'Download')}</span>
+      </a>
+      <a class="btn" href={pageUrl(lang, 'how')}>{t(lang, 'How it works')}</a>
+    </div>
+  </div>
+</header>

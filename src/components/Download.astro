@@ -1,0 +1,135 @@
+---
+import { t, dateLocale, type Lang } from '../i18n';
+import { getRelease } from '../lib/release';
+import { formatDate, mb, RELEASES_PAGE, type Slot } from '../lib/assets';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const T = (en: string) => t(lang, en);
+const rel = await getRelease();
+
+// Release values are marked with data-rel / data-asset so src/scripts/release.ts can swap in a newer release.
+const version = `<span data-rel="version">${rel.version}</span>`;
+const date = `<span data-rel="date" data-iso="${rel.date}">${formatDate(rel.date, dateLocale(lang))}</span>`;
+const heading = T('Download the app');
+const released = T('Version 0.6.3, released 12 November 2026.')
+  .replace('0.6.3', version).replace(/\d{1,2}\.? November 2026/, date);
+
+const href = (slot: Slot) => rel.assets[slot]?.url ?? RELEASES_PAGE;
+const name = (slot: Slot) => rel.assets[slot]?.name ?? '';
+const size = (slot: Slot) => (rel.assets[slot] ? mb(rel.assets[slot]!.size) : '–');
+const ext = { target: '_blank', rel: 'noopener' };
+
+const platforms = [
+  {
+    os: 'macos', tab: 'macOS', button: 'Download for macOS', needs: 'M1<small>or newer</small>',
+    steps: [
+      'Unzip the download and open <b>ORQWA</b>.',
+      'If macOS blocks it, close the warning with <b>Done</b>.',
+      'Open <b>System Settings → Privacy &amp; Security</b>. Under Security, find the message about ORQWA and choose <b>Open Anyway</b>.',
+      'Confirm with your password or Touch ID, then choose <b>Open Anyway</b> again.',
+    ],
+    note: 'This will happen again after every update. ORQWA runs on Macs with Apple silicon only.',
+  },
+  {
+    os: 'windows', tab: 'Windows', button: 'Download for Windows', needs: '64-bit<small>Windows</small>',
+    alt: { slot: 'windows-zip', label: 'Portable version, no install needed' },
+    steps: [
+      'Run the <b>.msi</b> installer, then open ORQWA from the Start menu.',
+      'On “Windows protected your PC”, choose <b>More info → Run anyway</b>.',
+      'If Smart App Control blocks it without that option, ORQWA only runs with Smart App Control turned off under <b>Windows Security → App &amp; browser control</b>.',
+    ],
+    note: 'For the portable version, unzip it and keep all its files together in one folder.',
+  },
+  {
+    os: 'linux', tab: 'Linux', button: 'Download for Linux', needs: 'Ubuntu<small>22.04+</small>',
+    alt: { slot: 'linux-arm', label: 'Linux for ARM computers' },
+    steps: [
+      'Unpack the download.',
+      'Open <b>ORQWA.x86_64</b> (or <b>ORQWA.arm64</b>). Keep all the unpacked files together.',
+    ],
+    note: 'Needs a recent Linux, such as Ubuntu 22.04 or Debian 12 or newer. The overlay needs an X11 desktop session.',
+  },
+  {
+    os: 'android', tab: 'Android', button: 'Download for Android', needs: '10+<small>64-bit</small>',
+    steps: [
+      'Open the download on the tablet. Allow your browser or file manager to <b>install unknown apps</b>, then return and choose <b>Install</b>.',
+      'If Play Protect warns, choose <b>More details → Install anyway</b>.',
+      'Allow <b>Nearby devices</b> to connect trainers and sensors. Before Android 12 this is called Location; ORQWA does not read your location.',
+    ],
+    note: "For tablets with Android 10 or newer. Uninstalling deletes ORQWA's data on the tablet, so export rides you want to keep first.",
+  },
+] as const;
+
+const firstRide = [
+  ['Wake your trainer', 'Turn on Bluetooth and wake your trainer by pedalling.'],
+  ['Connect it', 'Open <b>Devices</b>, press <b>Search</b> beside the trainer and wait for <b>Connected</b>.'],
+  ['Set up your profile', 'Open <b>Profile</b>, press the pencil and enter your weight, FTP (the power you can hold for about an hour) and maximum heart rate.'],
+  ['Pick a course', 'Open <b>Courses → Twann – Chasseral</b>. When it is ready, press <b>Ride</b>.'],
+  ['Ride', 'Pedal to ride. <b>P</b> or space pauses, <b>S</b> opens ride settings.'],
+  ['Save your ride', 'Choose <b>Finish &amp; save</b>. Your ride appears under <b>History</b>.'],
+];
+---
+<section class="dl" id="download" aria-labelledby="dl-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <h1 id="dl-h" set:html={heading} />
+      <p class="lede" set:html={released} />
+    </div>
+
+    <div class="tabs" role="tablist" aria-label={T('Platform')} id="tabs" data-yours={T('yours')}>
+      {platforms.map((p, i) => (
+        <button role="tab" id={`tab-${p.os}`} aria-controls={`p-${p.os}`} aria-selected={i === 0 ? 'true' : 'false'}
+          tabindex={i === 0 ? undefined : '-1'} data-os={p.os}>{T(p.tab)}</button>
+      ))}
+    </div>
+
+    <div class="panels">
+    {platforms.map((p, i) => (
+      <div class="panel" role="tabpanel" id={`p-${p.os}`} aria-labelledby={`tab-${p.os}`} hidden={i !== 0}>
+        <div class="card">
+          <div class="hud">
+            <span class="label">{T('Version')}</span><span class="label">{T('Size')}</span><span class="label">{T('Needs')}</span>
+            <span class="v" set:html={version} />
+            <span class="v"><span data-asset-size={p.os}>{size(p.os)}</span><small>MB</small></span>
+            <span class="v" set:html={T(p.needs)} />
+          </div>
+          <a class="btn btn-primary" href={href(p.os)} data-asset={p.os} {...ext}>{T(p.button)}</a>
+          <span class="file" data-asset-name={p.os}>{name(p.os)}</span>
+          {'alt' in p && rel.assets[p.alt.slot] && (
+            <div class="alt">
+              <a href={href(p.alt.slot)} data-asset={p.alt.slot} {...ext}>{T(p.alt.label)}</a>
+              <span class="mono"><span data-asset-name={p.alt.slot}>{name(p.alt.slot)}</span> · <span data-asset-size={p.alt.slot}>{size(p.alt.slot)}</span> MB</span>
+            </div>
+          )}
+        </div>
+        <div class="card">
+          <h2 class="h3">{T('Install')}</h2>
+          <ol class="install">
+            {p.steps.map((s) => <li><span set:html={T(s)} /></li>)}
+          </ol>
+          <p class="note">{T(p.note)}</p>
+        </div>
+      </div>
+    ))}
+    </div>
+
+    <div class="dl-more">
+      <a class="ext" href="https://github.com/ORQWA/ORQWA/releases" {...ext}>{T('All releases')}</a>
+      <a class="ext" href="https://github.com/ORQWA/ORQWA/actions/workflows/ci.yml?query=branch%3Amain" {...ext}>{T('Test versions')}</a>
+      <a class="ext" href="https://github.com/ORQWA/ORQWA/wiki/Getting-started" {...ext}>{T('Full install guide')}</a>
+    </div>
+  </div>
+</section>
+
+<section class="first-ride" aria-labelledby="first-h">
+  <div class="wrap">
+    <div class="sec-head"><h2 id="first-h">{T('Your first ride')}</h2></div>
+    <ol class="steps timeline" id="first-steps">
+      {firstRide.map(([title, text]) => (
+        <li><h3 class="h3">{T(title)}</h3><p set:html={T(text)} /></li>
+      ))}
+    </ol>
+    <p class="try" set:html={T('Just want to try? Turn on <b>Fake trainer</b> under Devices and ride without any hardware.')} />
+  </div>
+</section>

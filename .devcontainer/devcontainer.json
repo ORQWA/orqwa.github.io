@@ -1,0 +1,35 @@
+{
+  "name": "ORQWA website",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:24",
+
+  "workspaceFolder": "/workspaces/website",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/website,type=bind",
+  "mounts": [
+    // The screenshots: the orqwa-docs link points to ../orqwa/docs, so ORQWA's docs are
+    // mounted beside the workspace, read-only.
+    "source=${localWorkspaceFolder}/../orqwa/docs,target=/workspaces/orqwa/docs,type=bind,readonly",
+    "source=orqwa-website-node-modules,target=/workspaces/website/node_modules,type=volume",
+    "source=orqwa-website-npm-cache,target=/home/node/.npm,type=volume"
+  ],
+
+  "containerEnv": {
+    "ASTRO_TELEMETRY_DISABLED": "1"
+  },
+
+  "postCreateCommand": "sudo chown node:node node_modules /home/node/.npm && npm install",
+
+  "forwardPorts": [4321],
+  "portsAttributes": {
+    "4321": {
+      "label": "Website",
+      "onAutoForward": "openBrowser"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "astro-build.astro-vscode"
+      ]
+    }
+  }
+}

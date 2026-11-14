@@ -1,0 +1,12 @@
+---
+import Base from '../layouts/Base.astro';
+import Download from '../components/Download.astro';
+import { t, type Lang } from '../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+---
+<Base lang={lang} page="download" title={`${t(lang, 'Download')} · ORQWA`}
+  description={t(lang, 'Download ORQWA for macOS, Windows, Linux and Android tablets, with short install steps.')}>
+  <Download lang={lang} />
+</Base>

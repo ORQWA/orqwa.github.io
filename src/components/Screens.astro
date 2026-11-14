@@ -1,0 +1,44 @@
+---
+import { Image, getImage } from 'astro:assets';
+import { t, type Lang } from '../i18n';
+import { ridingShots, appShots } from '../lib/shots';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+
+// Each shot also gets a large version for the lightbox.
+const rows = await Promise.all(
+  [ridingShots, appShots].map((row) =>
+    Promise.all(row.map(async (s) => ({
+      ...s,
+      full: (await getImage({ src: s.src, width: Math.min(1920, s.src.width), format: 'webp' })).src,
+    }))),
+  ),
+);
+---
+<section class="screens" id="screens" aria-labelledby="screens-h">
+  <div class="wrap sec-head">
+    <h2 id="screens-h">{t(lang, 'Impressions')}</h2>
+  </div>
+  <div class="wrap reels">
+    {rows.map((row, i) => (
+      <div class="reel" data-reverse={i % 2 ? '' : undefined}>
+        <ul class="reel-track">
+          {row.map((s, j) => (
+            <li class="shot" style={`--ar: ${s.src.width} / ${s.src.height}`}>
+              <button type="button" data-full={s.full} data-caption={t(lang, s.caption)}>
+                <Image src={s.src} alt={t(lang, s.alt)} widths={[640, 960, 1280, 1600]}
+                  sizes="(max-width: 900px) 80vw, 760px" loading={i === 0 && j < 3 ? 'eager' : 'lazy'} />
+              </button>
+              <p class="shot-cap">{t(lang, s.caption)}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+  <dialog class="lightbox" id="lightbox" aria-label={t(lang, 'Screenshot')}>
+    <div class="lb-bar"><span id="lb-cap"></span><button type="button" id="lb-close">{t(lang, 'Close')}</button></div>
+    <img id="lb-img" alt="">
+  </dialog>
+</section>
