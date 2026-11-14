@@ -381,6 +381,7 @@ footer { border-top: 1px solid var(--line); padding-block: 48px 56px; color: var
 .credits { padding-block: calc(var(--bar) + clamp(40px, 6vw, 80px)) clamp(72px, 10vw, 120px); max-width: 820px; }
 .credits .credit { display: grid; gap: 8px; padding-block: 24px; border-top: 1px solid var(--line); }
 .credits .credit p { color: var(--muted); }
+.credits .updated { padding-top: 24px; border-top: 1px solid var(--line); color: var(--muted); font-size: .875em; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }

@@ -33,6 +33,7 @@ const stars = await getStars();
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>{title}</title>
   <meta name="description" content={description}>
+  <meta name="google-site-verification" content="DgJRqd1TD7s0HClI5zarxX0tmu8nu50Q9bgVvs1-XJE">
   <meta name="theme-color" content="#070B12">
   <link rel="icon" href={asset('favicon.svg')} type="image/svg+xml">
   {page && <link rel="canonical" href={canonical}>}
@@ -109,6 +110,7 @@ const stars = await getStars();
         <nav aria-label={t(lang, 'Get involved')}>
           <a href="https://github.com/ORQWA/ORQWA/issues" {...ext}>{t(lang, 'Report a bug or ask for a feature')}</a>
           <a href={pageUrl(lang, 'credits')} aria-current={here('credits')}>{t(lang, 'Credits and licences')}</a>
+          <a href={pageUrl(lang, 'privacy')} aria-current={here('privacy')}>{t(lang, 'Privacy')}</a>
         </nav>
       </div>
       <p class="independent">{t(lang, 'ORQWA is an independent project. It is not affiliated with or endorsed by Zwift, Strava, intervals.icu, Garmin, Wahoo, Shimano or any other company or service. All names and trademarks belong to their owners.')}</p>

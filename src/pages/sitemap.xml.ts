@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import { pageUrl, type Lang, type Page } from '../i18n';
 
-const pages: Page[] = ['home', 'how', 'download', 'credits'];
+const pages: Page[] = ['home', 'how', 'download', 'credits', 'privacy'];
 const langs: Lang[] = ['en', 'de'];
 
 /** Every page in both languages, each listing its translations, for search engines. */
