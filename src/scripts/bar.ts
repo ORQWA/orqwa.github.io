@@ -7,13 +7,11 @@ export function initBar() {
     onScroll();
   }
   initMenu();
-  // The stage shrinks a little as the page scrolls (motion.ts), so the position is scaled back.
   document.querySelectorAll<HTMLElement>('.feat, .stage').forEach((el) =>
     el.addEventListener('pointermove', (e) => {
       const r = el.getBoundingClientRect();
-      const scale = r.width / el.offsetWidth || 1;
-      el.style.setProperty('--mx', `${(e.clientX - r.left) / scale}px`);
-      el.style.setProperty('--my', `${(e.clientY - r.top) / scale}px`);
+      el.style.setProperty('--mx', `${e.clientX - r.left}px`);
+      el.style.setProperty('--my', `${e.clientY - r.top}px`);
     }),
   );
 }

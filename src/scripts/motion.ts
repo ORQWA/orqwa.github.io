@@ -43,12 +43,13 @@ export function initMotion(reels: HTMLElement[]) {
   addEventListener('load', () => ScrollTrigger.refresh());
 }
 
-/** The stage turns into a card as it scrolls away. */
+/** The logo drifts down and fades a little as the stage scrolls away; the stage keeps its size. */
 function hero() {
   if (!document.getElementById('stage')) return;
-  const scrollTrigger = { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true };
-  gsap.to('#stage', { scale: 0.93, borderRadius: 28, ease: 'none', scrollTrigger });
-  gsap.to('#lockup-wrap', { yPercent: 14, opacity: 0.4, ease: 'none', scrollTrigger: { ...scrollTrigger } });
+  gsap.to('#lockup-wrap', {
+    yPercent: 14, opacity: 0.4, ease: 'none',
+    scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true },
+  });
 }
 
 /** Feature cards rise in, from a visible state. */
