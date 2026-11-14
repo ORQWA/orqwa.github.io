@@ -1,9 +1,9 @@
 {
  "yours": "deins",
  "Switch to English": "Switch to English",
- "ORQWA is a free indoor cycling app. Import a route or a ride video and ride it on your smart trainer.": "ORQWA ist eine kostenlose Indoor-Cycling-App. Importiere eine Route oder ein Fahrvideo und fahre sie auf deinem Smart-Trainer.",
- "How ORQWA handles your data and when it uses the internet.": "Wie ORQWA mit deinen Daten umgeht und wann es das Internet nutzt.",
- "Download ORQWA for macOS, Windows, Linux and Android tablets, with short install steps.": "Lade ORQWA für macOS, Windows, Linux und Android-Tablets herunter, mit kurzer Installationsanleitung.",
+ "Free, open-source indoor cycling app for your smart trainer. Ride GPX routes in 3D or along ride videos, alone or with friends. No subscription, no account.": "Kostenlose Open-Source-Indoor-Cycling-App für deinen Smart-Trainer. Fahre GPX-Routen in 3D oder entlang von Fahrvideos, allein oder mit Freunden. Kein Abo, kein Konto.",
+ "How the free indoor cycling app ORQWA works: rides stay on your device, no account needed, group rides peer-to-peer, and most of it works offline.": "So funktioniert die kostenlose Indoor-Cycling-App ORQWA: Fahrten bleiben auf deinem Gerät, kein Konto nötig, Gruppenfahrten direkt und vieles offline.",
+ "Download ORQWA, the free indoor cycling app for smart trainers, for macOS, Windows, Linux and Android tablets. Short install steps included.": "Lade ORQWA herunter, die kostenlose Indoor-Cycling-App für Smart-Trainer, für macOS, Windows, Linux und Android-Tablets. Mit kurzer Installationsanleitung.",
  "Page not found": "Seite nicht gefunden",
  "This page does not exist, or it has moved.": "Diese Seite gibt es nicht, oder sie ist umgezogen.",
  "Back to the start page": "Zurück zur Startseite",
@@ -102,5 +102,9 @@
  "The organizer shares a prepared course or a workout. It downloads directly from the organizer to everyone and stays in their library.": "Der Organisator teilt eine vorbereitete Strecke oder ein Training. Es wird direkt vom Organisator zu allen geladen und bleibt in ihrer Sammlung.",
  "Where to find your data and how to sync it": "Wo deine Daten liegen und wie du sie synchronisierst",
  "Your rides and routes stay on your device. Syncing and group rides use your own connections, without relying on any specific online service.": "Deine Fahrten und Routen bleiben auf deinem Gerät. Synchronisieren und Gruppenfahrten nutzen deine eigenen Verbindungen, ohne von einem bestimmten Onlinedienst abzuhängen.",
- "Internet is only needed for route import, rider discovery, uploads, and updates. Group rides use peer-to-peer connections. Everything else works offline.": "Internet braucht es nur für den Routenimport, das Finden anderer Fahrer, Uploads und Updates. Gruppenfahrten nutzen direkte Verbindungen zwischen den Fahrern. Alles andere funktioniert offline."
+ "Internet is only needed for route import, rider discovery, uploads, and updates. Group rides use peer-to-peer connections. Everything else works offline.": "Internet braucht es nur für den Routenimport, das Finden anderer Fahrer, Uploads und Updates. Gruppenfahrten nutzen direkte Verbindungen zwischen den Fahrern. Alles andere funktioniert offline.",
+ "ORQWA, a free indoor cycling app": "ORQWA, eine kostenlose Indoor-Cycling-App",
+ "Free indoor cycling app for your smart trainer": "Kostenlose Indoor-Cycling-App für deinen Smart-Trainer",
+ "How the free indoor cycling app works · ORQWA": "So funktioniert die kostenlose Indoor-Cycling-App · ORQWA",
+ "Download the free indoor cycling app · ORQWA": "Kostenlose Indoor-Cycling-App herunterladen · ORQWA"
 }
