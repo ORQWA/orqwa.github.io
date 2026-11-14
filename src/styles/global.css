@@ -189,6 +189,17 @@ html.menu-open { overflow: hidden; }
   filter: drop-shadow(0 20px 60px rgba(10, 155, 245, .25));
 }
 .hero.is-playing .lockup { opacity: 0; }
+/* The pointer lights up the stage like the feature cards (bar.ts), but wide, faint and slow, so
+   it feels like the ground shifting rather than a torch. It sits under the video and the logo, so
+   it only shows on the static logo, and only with a mouse or trackpad. */
+@property --mx { syntax: '<length-percentage>'; inherits: true; initial-value: 50%; }
+@property --my { syntax: '<length-percentage>'; inherits: true; initial-value: 50%; }
+.stage { transition: --mx .9s cubic-bezier(.22, .61, .36, 1), --my .9s cubic-bezier(.22, .61, .36, 1); }
+.stage::before {
+  content: ""; position: absolute; inset: 0; opacity: 0; transition: opacity .8s ease; pointer-events: none;
+  background: radial-gradient(70% 90% at var(--mx) var(--my), rgba(46, 176, 255, .08), transparent 75%);
+}
+@media (hover: hover) { .stage:hover::before { opacity: 1; } }
 /* Narrow or short screens (phones, also in landscape): the stage is small, so the bar would cover
    the top of the logo. The whole video, uncropped, starts below the bar instead, so the logo in its
    last frame and the static one match exactly; the stage background still runs on under the bar. */
@@ -444,11 +455,11 @@ td { color: var(--muted); }
 /* Values set like the headings elsewhere. */
 .hud .v { font-size: 1.6rem; font-weight: 600; font-stretch: 86%; letter-spacing: -.02em; font-variant-numeric: tabular-nums; line-height: 1.1; }
 .hud .v small { font-size: 13px; font-stretch: 100%; letter-spacing: 0; color: var(--muted); font-weight: 400; margin-left: 4px; }
-.file { font: 500 14px var(--f-mono); color: var(--muted); word-break: break-all; }
+.file { font: 400 14px var(--f-sans); color: var(--muted); overflow-wrap: anywhere; }
 .alt { display: grid; gap: 8px; font-size: 15px; }
 .alt a { text-decoration: none; }
 .alt a:hover { text-decoration: underline; }
-.alt .mono { color: var(--muted); font-size: 13px; }
+.alt .mono { font-family: var(--f-sans); color: var(--muted); font-size: 14px; overflow-wrap: anywhere; }
 .install { counter-reset: i; list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
 .install li { counter-increment: i; display: grid; grid-template-columns: 26px 1fr; gap: 12px; color: var(--muted); }
 /* Numbered like the other step lists (the timeline pills), a size smaller. */

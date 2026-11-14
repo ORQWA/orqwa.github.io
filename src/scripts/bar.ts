@@ -1,4 +1,4 @@
-/** The top bar turns solid once the page scrolls; feature cards light up under the pointer. */
+/** The top bar turns solid once the page scrolls; feature cards and the stage light up under the pointer. */
 export function initBar() {
   const bar = document.getElementById('bar');
   if (bar) {
@@ -7,11 +7,13 @@ export function initBar() {
     onScroll();
   }
   initMenu();
-  document.querySelectorAll<HTMLElement>('.feat').forEach((el) =>
+  // The stage shrinks a little as the page scrolls (motion.ts), so the position is scaled back.
+  document.querySelectorAll<HTMLElement>('.feat, .stage').forEach((el) =>
     el.addEventListener('pointermove', (e) => {
       const r = el.getBoundingClientRect();
-      el.style.setProperty('--mx', `${e.clientX - r.left}px`);
-      el.style.setProperty('--my', `${e.clientY - r.top}px`);
+      const scale = r.width / el.offsetWidth || 1;
+      el.style.setProperty('--mx', `${(e.clientX - r.left) / scale}px`);
+      el.style.setProperty('--my', `${(e.clientY - r.top) / scale}px`);
     }),
   );
 }
