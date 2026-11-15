@@ -36,7 +36,7 @@ export const ridingShots: Shot[] = [
   { src: fujiEvening, alt: "Evening sun over the lake below Mount Fuji in ORQWA's 3D world", caption: 'Evening below Mount Fuji' },
   { src: furkaGroup, alt: 'Climbing the Furka with friends, with the HUD and the list of riders', caption: 'Group ride up the Furka' },
   { src: wadaHairpins, alt: 'A group riding autumn hairpins in Japan, seen from above', caption: 'Autumn hairpins from above' },
-  { src: scheideggWinter, alt: 'Climbing through a snowy forest below the Wetterhorn, with the HUD', caption: 'Every season' },
+  { src: scheideggWinter, alt: 'Riding down through a snowy forest below the Wetterhorn, with the HUD', caption: 'Snowy descent from the Grosse Scheidegg' },
   { src: saimaaSunset, alt: 'A group on the Saimaa lake ridge at sunset, seen from above', caption: 'Saimaa at sunset' },
   { src: saimaaRain, alt: 'Riding in the rain on the Saimaa ridge in a group ride, with the HUD', caption: 'Riding in the rain' },
   { src: nesqueGorge, alt: 'A group above the Gorges de la Nesque in autumn evening light', caption: 'Gorges de la Nesque' },
