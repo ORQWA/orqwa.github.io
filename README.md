@@ -29,15 +29,8 @@ come from its `docs/images`, through the `orqwa-docs` link.
   Release files are matched by name in `src/lib/assets.ts`; update the patterns there if the
   file names change.
 - **Screenshots.** Listed in `src/lib/shots.ts`, read from ORQWA's `docs/images` at build time.
-- **Rebuilds.** On every push, daily, and when ORQWA's CI sends an `orqwa-release` dispatch
-  after publishing a release:
-
-  ```yaml
-  - name: Rebuild the website
-    env:
-      GH_TOKEN: ${{ secrets.WEBSITE_DISPATCH_TOKEN }}  # fine-grained token: Contents read/write on the website repo
-    run: gh api repos/ORQWA/<website-repo>/dispatches -f event_type=orqwa-release
-  ```
+- **Rebuilds.** On every push and daily. A new release does not trigger a rebuild: the
+  browser check above already shows it, and the daily build picks it up.
 
 ## Translations
 
