@@ -5,7 +5,7 @@ import type { ImageMetadata } from 'astro';
 import fujiEvening from '../../orqwa-docs/images/showcase/fuji-lake-evening.jpg';
 import furkaGroup from '../../orqwa-docs/images/showcase/alpenbrevet-furka-group-climb.jpg';
 import wadaHairpins from '../../orqwa-docs/images/showcase/wada-hairpin-autumn-group.jpg';
-import scheideggWinter from '../../orqwa-docs/images/showcase/grosse-scheidegg-winter-dark.jpg';
+import scheideggWinter from '../../orqwa-docs/images/showcase/grosse-scheidegg-winter-gradient.jpg';
 import saimaaSunset from '../../orqwa-docs/images/showcase/saimaa-ridge-group-evening.jpg';
 import saimaaRain from '../../orqwa-docs/images/showcase/saimaa-ridge-rain-group.jpg';
 import nesqueGorge from '../../orqwa-docs/images/showcase/nesque-gorge-autumn-group.jpg';
