@@ -4,10 +4,7 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
-  # Sent by ORQWA's CI when it publishes a release (see README), so download links update at once.
-  repository_dispatch:
-    types: [orqwa-release]
-  # Picks up new screenshots from the ORQWA repository, and releases if the dispatch is missing.
+  # Picks up new screenshots and releases from the ORQWA repository.
   schedule:
     - cron: '17 4 * * *'
 
