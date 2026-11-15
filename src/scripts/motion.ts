@@ -82,30 +82,25 @@ function screens(reels: HTMLElement[], lenis: Lenis) {
   });
   const st = tween.scrollTrigger!;
 
-  // "The middle": a fixed band in the middle of the reels, as wide as a shot in focus. Not the
-  // focused shot itself, which drifts off centre and shrinks between shots as the reels run.
-  let x: number | null = null;
-  const inMiddle = () => {
-    if (x === null) return false;
+  // "The middle": a fixed band in the middle of the reels, as wide as a shot in focus, or the
+  // focused shots themselves, which drift off centre a little as the reels run. The wheel event
+  // carries the pointer position, which stays right while the section slides under a still mouse.
+  const inMiddle = (x: number) => {
     const r = reels[0].getBoundingClientRect();
     const h = reels[0].querySelector('.shot button')?.clientHeight ?? 0;
-    return Math.abs(x - (r.left + r.width / 2)) <= h * 8 / 9 * 1.1;
+    if (Math.abs(x - (r.left + r.width / 2)) <= h * 8 / 9 * 1.1) return true;
+    return [...section.querySelectorAll('.shot.is-focus button')]
+      .some((b) => { const f = b.getBoundingClientRect(); return x >= f.left && x <= f.right; });
   };
-  const onMove = (e: PointerEvent) => { x = e.clientX; };
-  const onLeave = () => { x = null; };
   const onWheel = (e: WheelEvent) => {
-    if (inMiddle() || !st.isActive || Math.abs(e.deltaY) < Math.abs(e.deltaX)) return;
+    if (!st.isActive || Math.abs(e.deltaY) < Math.abs(e.deltaX) || inMiddle(e.clientX)) return;
     // Captured before Lenis sees it, so the pinned stretch is skipped instead of scrolled.
     e.preventDefault();
     e.stopImmediatePropagation();
     lenis.scrollTo(e.deltaY > 0 ? st.end + 2 : st.start - 2, { duration: 0.9, lock: true });
   };
-  section.addEventListener('pointermove', onMove);
-  section.addEventListener('pointerleave', onLeave);
   window.addEventListener('wheel', onWheel, { passive: false, capture: true });
   return () => {
-    section.removeEventListener('pointermove', onMove);
-    section.removeEventListener('pointerleave', onLeave);
     window.removeEventListener('wheel', onWheel, { capture: true });
   };
 }
