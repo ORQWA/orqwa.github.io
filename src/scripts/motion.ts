@@ -82,15 +82,19 @@ function screens(reels: HTMLElement[], lenis: Lenis) {
   });
   const st = tween.scrollTrigger!;
 
-  // "The middle": as wide as the shot in focus, in the middle of the reels.
-  let inMiddle = false;
-  const onMove = (e: PointerEvent) => {
-    const focus = section.querySelector('.shot.is-focus button')?.getBoundingClientRect();
-    inMiddle = !!focus && e.clientX >= focus.left && e.clientX <= focus.right;
+  // "The middle": a fixed band in the middle of the reels, as wide as a shot in focus. Not the
+  // focused shot itself, which drifts off centre and shrinks between shots as the reels run.
+  let x: number | null = null;
+  const inMiddle = () => {
+    if (x === null) return false;
+    const r = reels[0].getBoundingClientRect();
+    const h = reels[0].querySelector('.shot button')?.clientHeight ?? 0;
+    return Math.abs(x - (r.left + r.width / 2)) <= h * 8 / 9 * 1.1;
   };
-  const onLeave = () => { inMiddle = false; };
+  const onMove = (e: PointerEvent) => { x = e.clientX; };
+  const onLeave = () => { x = null; };
   const onWheel = (e: WheelEvent) => {
-    if (inMiddle || !st.isActive || Math.abs(e.deltaY) < Math.abs(e.deltaX)) return;
+    if (inMiddle() || !st.isActive || Math.abs(e.deltaY) < Math.abs(e.deltaX)) return;
     // Captured before Lenis sees it, so the pinned stretch is skipped instead of scrolled.
     e.preventDefault();
     e.stopImmediatePropagation();
