@@ -215,7 +215,7 @@ html.menu-open { overflow: hidden; }
    at --logo-h of the video's height, grows with it, still exactly on the last frame. */
 @media (max-width: 760px) and (orientation: portrait) {
   .stage {
-    --vid-h: 76vw;
+    --vid-h: 92vw;
     height: calc(var(--vid-h) + var(--top));
     --logo-h: calc(.5028 * var(--vid-h));
   }
@@ -235,6 +235,7 @@ html.menu-open { overflow: hidden; }
   text-align: center; justify-items: center;
 }
 .hero-copy h1 { max-width: 18ch; margin-inline: auto; }
+.hero-copy h1 em { font-style: normal; color: var(--accent-hi); }
 .hero-copy .lede { margin: 18px auto 0; }
 .hero-actions { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 12px; padding-top: 8px; }
 /* Phones: centred multi-line text has a ragged left edge that is slow to read, and two buttons of
@@ -243,7 +244,7 @@ html.menu-open { overflow: hidden; }
    thumb targets. */
 @media (max-width: 600px) {
   .hero-copy { text-align: left; justify-items: stretch; gap: 28px; padding-block: 36px 8px; }
-  .hero-copy h1 { max-width: none; margin-inline: 0; font-size: clamp(2.15rem, 10vw, 2.75rem); line-height: 1.04; }
+  .hero-copy h1 { max-width: none; margin-inline: 0; font-size: clamp(2rem, 8.5vw, 2.5rem); line-height: 1.04; }
   .hero-copy .lede { margin: 16px 0 0; font-size: 1.06rem; line-height: 1.6; text-wrap: pretty; }
   .hero-actions { display: grid; grid-template-columns: 1fr; gap: 10px; padding-top: 0; }
   .hero-actions .btn { justify-content: center; min-height: 54px; font-size: 17px; border-radius: 14px; }

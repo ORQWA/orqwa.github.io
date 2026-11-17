@@ -18,7 +18,7 @@ const label = (os: string) => t(lang, `Download for ${os}`);
   </div>
   <div class="wrap hero-copy">
     <div>
-      <h1>{t(lang, 'Make Waves With Watts, Not Payments')}</h1>
+      <h1 set:html={t(lang, 'Make Waves With <em>Watts</em>, Not Payments')} />
       <p class="lede">{t(lang, 'ORQWA is a free, open-source indoor cycling app. Import a route file (GPX) or a ride video and ride it on your smart trainer, through a 3D world or along the video, alone or with friends.')}</p>
     </div>
     <div class="hero-actions">
