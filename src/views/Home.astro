@@ -12,21 +12,31 @@ const { lang } = Astro.props;
 const T = (en: string) => t(lang, en);
 const description = T('Free, open-source indoor cycling app for your smart trainer. Ride GPX routes in 3D or along ride videos, alone or with friends. No subscription, no account.');
 const release = await getRelease();
-// Tells search engines what ORQWA is: a free app, its platforms and where to get it.
+const home = new URL(pageUrl('en', 'home'), Astro.site).href;
+const logo = new URL(asset('logo.png'), Astro.site).href;
+// Tells search engines what ORQWA is: a free app, its platforms and where to get it. The
+// WebSite names the site, else Google shows "GitHub" for orqwa.github.io; the black-orca
+// logo on white is the thumbnail it should pick.
 const app = {
   '@context': 'https://schema.org',
-  '@type': 'SoftwareApplication',
-  name: 'ORQWA',
-  description,
-  url: new URL(pageUrl(lang, 'home'), Astro.site).href,
-  downloadUrl: new URL(pageUrl(lang, 'download'), Astro.site).href,
-  image: new URL(asset('og.jpg'), Astro.site).href,
-  applicationCategory: 'SportsApplication',
-  operatingSystem: 'macOS, Windows, Linux, Android',
-  softwareVersion: release.version,
-  inLanguage: ['en', 'de'],
-  license: 'https://github.com/ORQWA/ORQWA/blob/main/LICENSE',
-  offers: { '@type': 'Offer', price: '0', priceCurrency: 'CHF' },
+  '@graph': [
+    { '@type': 'WebSite', name: 'ORQWA', url: home },
+    { '@type': 'WebPage', url: new URL(pageUrl(lang, 'home'), Astro.site).href, primaryImageOfPage: logo },
+    {
+      '@type': 'SoftwareApplication',
+      name: 'ORQWA',
+      description,
+      url: new URL(pageUrl(lang, 'home'), Astro.site).href,
+      downloadUrl: new URL(pageUrl(lang, 'download'), Astro.site).href,
+      image: [logo, new URL(asset('og.jpg'), Astro.site).href],
+      applicationCategory: 'SportsApplication',
+      operatingSystem: 'macOS, Windows, Linux, Android',
+      softwareVersion: release.version,
+      inLanguage: ['en', 'de'],
+      license: 'https://github.com/ORQWA/ORQWA/blob/main/LICENSE',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'CHF' },
+    },
+  ],
 };
 ---
 <Base lang={lang} page="home" title={`ORQWA – ${T('Free indoor cycling app for your smart trainer')}`} {description}>
