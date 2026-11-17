@@ -1,0 +1,53 @@
+---
+import { t, type Lang } from '../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const T = (en: string) => t(lang, en);
+
+// What connects, at a glance. The full list and the setup steps live in the user guide
+// (wiki/Devices-and-riding.md in the app repository); keep the two in step.
+const groups = [
+  {
+    title: 'Smart Trainers',
+    text: 'Most current smart trainers work. Tested with:',
+    items: ['Wahoo KICKR CORE 2', 'Tacx NEO 2 Smart', 'Elite Direto X'],
+    icon: '<path d="M4 17h16M7 17l3-9h4l3 9"/><circle cx="12" cy="8" r="1.6"/><path d="M5 21h14"/>',
+  },
+  {
+    title: 'Sensors',
+    text: 'Connect your own sensors next to the trainer:',
+    items: ['Power meters', 'Cadence sensors', 'Heart-rate straps'],
+    icon: '<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/><path d="M7 12h3l1.5-2.5L14 15l1.5-3H17"/>',
+  },
+  {
+    title: 'Shifters and Remotes',
+    text: 'Shift virtual gears and control your ride with:',
+    items: ['Zwift Click and Click v2', 'Shimano Di2 (D-Fly buttons)', 'Your phone or tablet, no app needed', 'Your keyboard'],
+    note: 'Zwift Play and Zwift Ride are not supported.',
+    icon: '<circle cx="12" cy="12" r="8.5" stroke-dasharray="2.6 1.85"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4"/>',
+  },
+];
+---
+<section class="devices" id="devices" aria-labelledby="devices-h">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="devices-h">{T('Works With Your Gear')}</h2>
+      <p class="lede">{T('Trainers, sensors and shifters connected over Bluetooth.')}</p>
+    </div>
+    <div class="compat">
+      {groups.map((g) => (
+        <div class="compat-item">
+          <svg class="compat-icon" viewBox="0 0 24 24" aria-hidden="true" set:html={g.icon} />
+          <h3 class="h3">{T(g.title)}</h3>
+          <p>{T(g.text)}</p>
+          <ul>{g.items.map((i) => <li>{T(i)}</li>)}</ul>
+          {g.note && <p class="compat-note">{T(g.note)}</p>}
+        </div>
+      ))}
+    </div>
+    <p class="compat-more">
+      <a class="ext" href="https://github.com/ORQWA/ORQWA/wiki/Devices-and-riding#devices" target="_blank" rel="noopener">{T('Connecting devices, step by step')}</a>
+    </p>
+  </div>
+</section>

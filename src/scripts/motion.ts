@@ -29,14 +29,16 @@ export function initMotion(reels: HTMLElement[]) {
   features();
   timeline();
   const mm = gsap.matchMedia();
-  mm.add('(min-width: 900px)', () => screens(reels, lenis));
+  // Screens: pinned and run by scrolling on every width; phones get a shorter, snappier stretch.
+  mm.add({ wide: '(min-width: 900px)', phone: '(max-width: 899.98px)' }, (ctx) =>
+    screens(reels, lenis, !!ctx.conditions?.phone));
   // How it works: the wide drawings from 1024px (see global.css), the tall ones below.
   mm.add('(min-width: 1024px)', () => {
-    const cleanups = [flow(false, lenis), groupFlow(false, lenis)];
+    const cleanups = [flow(false, lenis), groupFlow(false, lenis), remoteFlow(false, lenis)];
     return () => cleanups.forEach((c) => c?.());
   });
   mm.add('(max-width: 1023.98px)', () => {
-    const cleanups = [flow(true, lenis), groupFlow(true, lenis), shareStepHeight()];
+    const cleanups = [flow(true, lenis), groupFlow(true, lenis), remoteFlow(true, lenis), shareStepHeight()];
     return () => cleanups.forEach((c) => c?.());
   });
 
@@ -65,7 +67,7 @@ function features() {
  * The section stays in place while scrolling runs the two reels, in opposite directions. With
  * the pointer outside the middle shot, a scroll skips past the section instead (or back above it).
  */
-function screens(reels: HTMLElement[], lenis: Lenis) {
+function screens(reels: HTMLElement[], lenis: Lenis, phone = false) {
   const section = document.getElementById('screens');
   if (!section || !reels.length) return;
   const room = (r: HTMLElement) => r.scrollWidth - r.clientWidth;
@@ -76,8 +78,8 @@ function screens(reels: HTMLElement[], lenis: Lenis) {
   const tween = gsap.to(state, {
     p: 1, ease: 'none', onUpdate: apply,
     scrollTrigger: {
-      trigger: section, start: 'top top', end: () => '+=' + Math.max(...reels.map(room)) * 1.4,
-      pin: true, scrub: 0.8, invalidateOnRefresh: true, onRefresh: apply,
+      trigger: section, start: 'top top', end: () => '+=' + Math.max(...reels.map(room)) * (phone ? 0.8 : 1.4),
+      pin: true, scrub: phone ? 0.5 : 0.8, invalidateOnRefresh: true, onRefresh: apply,
     },
   });
   const st = tween.scrollTrigger!;
@@ -203,8 +205,8 @@ function stepper(scene: HTMLElement, list: HTMLElement, phone: boolean, stepAt: 
 }
 
 /**
- * Phones: both drawings share one size (360×544) and fill the height above their steps, so the
- * steps get the same room in both scenes (the tallest step of either) and the drawings the same scale.
+ * Phones: the drawings share one size (360×544) and fill the height above their steps, so the
+ * steps get the same room in every scene (the tallest step of any) and the drawings the same scale.
  */
 function shareStepHeight() {
   const lists = [...document.querySelectorAll<HTMLElement>('.scene.is-m .steps')];
@@ -345,6 +347,66 @@ function groupFlow(phone: boolean, lenis: Lenis) {
     .to(q('.g-voice'), { opacity: 1, duration: 0.4, stagger: 0.08 }, 6.4);
   travel(6.3, false);
   travel(6.9, true);
+  tl.to({}, { duration: 1.4 });
+  steps.attach(tl);
+
+  return steps.cleanup;
+}
+
+/** Phone remote: switched on, scanned, taps travel, and a stranger is kept out. */
+function remoteFlow(phone: boolean, lenis: Lenis) {
+  const svg = document.getElementById(phone ? 'rflow-m' : 'rflow');
+  const scene = document.getElementById('remote-scene');
+  const list = document.getElementById('remote-steps');
+  if (!svg || !scene || !list) return;
+  const k = (n: string, sub = '') => svg.querySelectorAll(`[data-k="${n}"]${sub ? ' ' + sub : ''}`);
+  const q = (s: string) => svg.querySelectorAll(s);
+  const steps = stepper(scene, list, phone, [1.6, 3.6, 6], lenis);
+
+  const packets = [...svg.querySelectorAll<SVGCircleElement>('.r-packet')];
+  gsap.set(q('[data-draw]'), { strokeDasharray: 1, strokeDashoffset: 1 });
+  gsap.set(k('r-link', '.ah'), { opacity: 0 });
+  gsap.set(k('r-link', '.lbl'), { opacity: 0 });
+  // The switch starts off; its knob's cx in the markup is the on position, data-off the off one.
+  const track = k('r-switch', '.sw-track');
+  const knob = svg.querySelector<SVGCircleElement>('[data-k="r-switch"] .sw-knob')!;
+  const knobOn = Number(knob.getAttribute('cx'));
+  gsap.set(track, { fill: 'rgba(150, 190, 240, .22)' });
+  gsap.set(knob, { attr: { cx: Number(knob.dataset.off) } });
+  gsap.set(k('r-qr'), { opacity: 0 });
+  gsap.set(k('r-phone'), { opacity: 0.3 });
+  gsap.set(k('r-screen'), { opacity: 0 });
+  gsap.set(k('r-block', '.node'), { opacity: 0 });
+  gsap.set(k('r-block', '.ln'), { opacity: 0 });
+  gsap.set(k('r-block', '.no-x'), { opacity: 0 });
+
+  const tl = gsap.timeline({
+    defaults: { ease: 'none' },
+    scrollTrigger: { ...pin('#remote-pin', phone, 2200), onUpdate: (s) => steps.update(s.progress * tl.duration()) },
+  });
+  // 1 · The remote is switched on, and ORQWA shows its code.
+  tl.to(track, { fill: '#2EB0FF', duration: 0.3 }, 0.2)
+    .to(knob, { attr: { cx: knobOn }, duration: 0.3, ease: 'power2.out' }, 0.2)
+    .to(k('r-qr'), { opacity: 1, duration: 0.5 }, 0.7);
+  // 2 · The phone scans it, joins straight over the Wi-Fi, and shows the remote.
+  tl.to(k('r-link', '[data-draw]'), { strokeDashoffset: 0, duration: 0.8 }, 1.7)
+    .to(k('r-link', '.ah'), { opacity: 1, duration: 0.15 }, 2.4)
+    .to(k('r-link', '.lbl'), { opacity: 1, duration: 0.3 }, 2.1)
+    .to(k('r-phone'), { opacity: 1, duration: 0.4 }, 2.3)
+    .to(k('r-screen'), { opacity: 1, duration: 0.5 }, 2.5);
+  // 3 · Presses go to the computer, the gear comes back.
+  tl.to(k('r-sub-a'), { opacity: 0, duration: 0.3 }, 3.7)
+    .to(k('r-sub-b'), { opacity: 1, duration: 0.3 }, 3.9);
+  packets.forEach((p, i) => {
+    const [x1, y1, x2, y2] = ['x1', 'y1', 'x2', 'y2'].map((key) => Number(p.dataset[key]));
+    const at = 4.1 + i * 0.6;
+    tl.fromTo(p, { attr: { cx: x1, cy: y1 }, opacity: 0 }, { attr: { cx: x2, cy: y2 }, opacity: 1, duration: 0.6, ease: 'power1.inOut' }, at)
+      .to(p, { opacity: 0, duration: 0.12 }, at + 0.6);
+  });
+  // 4 · Someone else on the network gets no further than the secret address.
+  tl.to(k('r-block', '.node'), { opacity: 1, duration: 0.4 }, 6.1)
+    .to(k('r-block', '.ln'), { opacity: 1, duration: 0.5 }, 6.4)
+    .to(k('r-block', '.no-x'), { opacity: 1, duration: 0.2 }, 7);
   tl.to({}, { duration: 1.4 });
   steps.attach(tl);
 

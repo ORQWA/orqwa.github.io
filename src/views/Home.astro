@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero.astro';
 import Features from '../components/Features.astro';
+import Devices from '../components/Devices.astro';
 import Screens from '../components/Screens.astro';
 import { t, pageUrl, asset, type Lang } from '../i18n';
 import { getRelease } from '../lib/release';
@@ -32,6 +33,7 @@ const app = {
   <script slot="head" type="application/ld+json" set:html={JSON.stringify(app)} />
   <Hero slot="hero" lang={lang} />
   <Features lang={lang} />
+  <Devices lang={lang} />
   <Screens lang={lang} />
   <section class="next-steps" aria-labelledby="next-h">
     <div class="wrap">
@@ -53,11 +55,11 @@ const app = {
           </span>
           <span class="next-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M10 14 20 4M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg></span>
         </a>
-        <a class="feat next-item is-primary" href={pageUrl(lang, 'download')}>
+        <a class="feat next-item" href={pageUrl(lang, 'download')}>
           <svg class="next-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>
           <span class="next-text">
             <span class="next-title">{T('Download')}</span>
-            <span class="next-line">{T('For macOS, Windows, Linux and Android tablets. Free and open source.')}</span>
+            <span class="next-line">{T('For macOS, Windows, Linux and Android 10 or newer. Free and open source.')}</span>
           </span>
           <span class="next-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span>
         </a>

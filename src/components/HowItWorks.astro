@@ -1,11 +1,16 @@
 ---
+import { getImage } from 'astro:assets';
 import { t, asset, type Lang } from '../i18n';
+// The remote's riding page, from the app's own screenshot so it stays current. The drawings show
+// only its second phone: the viewBox around the <image> is that phone's box in the PNG's pixels.
+import remotePages from '../../orqwa-docs/images/app/remote-pages.png';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const T = (en: string) => t(lang, en);
 const mark = asset('brand/mark.svg');
 const wordmark = asset('brand/wordmark.svg');
+const remoteShot = (await getImage({ src: remotePages, width: 1830, format: 'webp' })).src;
 const servers = 'https://github.com/ORQWA/ORQWA/wiki/Getting-started#when-orqwa-needs-the-internet';
 const sync = 'https://github.com/ORQWA/ORQWA/wiki/Syncing-between-devices';
 const ext = { target: '_blank', rel: 'noopener' };
@@ -241,6 +246,98 @@ const ext = { target: '_blank', rel: 'noopener' };
         <li class="c-sync"><h3 class="h3">{T('Share the Course')}</h3><p>{T('The organizer shares a prepared course or a workout. It downloads directly from the organizer to everyone and stays in their library.')}</p></li>
         <li class="c-sync"><h3 class="h3">{T('Ride and Talk Together')}</h3><p>{T('Position, power and voice go through the organizer to everyone, so you see and hear each other on the road.')}</p></li>
       </ol>
+      <div class="step-dots" role="group" aria-label={T('Steps')} hidden></div>
+    </div>
+  </div>
+
+  <div class="wrap how-part solo-head"><div class="sec-head">
+    <h2>{T('Phone Remote')}</h2>
+    <p class="lede">{T('Shift and control your ride from a phone or tablet on the same Wi-Fi. No app to install, and no internet needed.')}</p>
+  </div></div>
+  <!-- Built like the solo scene: steps left, diagram right (src/scripts/motion.ts). The phone and
+       the computer talk over the home network only, so the link is green, like the device's own. -->
+  <div class="scene-pin" id="remote-pin">
+    <div class="wrap scene" id="remote-scene">
+      <ol class="steps timeline" id="remote-steps">
+        <li class="c-off"><h3 class="h3">{T('Turn It On')}</h3><p>{T('In ORQWA, open Devices and switch on the remote. A QR code appears on the screen.')}</p></li>
+        <li class="c-off"><h3 class="h3">{T('Scan the Code')}</h3><p>{T('Make sure your phone or tablet is on the same Wi-Fi as the computer, then scan the code with its camera. The remote opens in the browser.')}</p></li>
+        <li class="c-off"><h3 class="h3">{T('Ride')}</h3><p>{T('Shift gears, pause or change the camera from your phone. It talks to the computer over your Wi-Fi, so no internet connection is needed.')}</p></li>
+        <li class="c-off"><h3 class="h3">{T('Who Can Use It')}</h3><p>{T('The remote only works on phones that have scanned the code. To stop a phone from using it, make a new code in ORQWA.')}</p></li>
+      </ol>
+      <figure class="flow-fig">
+        <svg class="flow flow-d" id="rflow" viewBox="0 0 900 560" role="img" aria-labelledby="rflow-t rflow-d">
+          <title id="rflow-t">{T('How the phone remote connects')}</title>
+          <desc id="rflow-d">{T('ORQWA on your computer shows a QR code. Your phone scans it, opens the remote in its browser without an app, and talks straight to the computer over your Wi-Fi, not through the internet. Others on your Wi-Fi cannot use it without the code.')}</desc>
+          <!-- Like the solo drawing's map and landscape services, but never used: dimmed throughout. -->
+          <g class="dim">
+            <rect class="zone" x="10" y="10" width="880" height="110" rx="18"/>
+            <text class="zone-label" x="34" y="40">{T('Internet')}</text>
+            <g class="node"><rect x="340" y="34" width="220" height="64" rx="14"/><text class="n-title" x="362" y="62">{T('App store')}</text><text class="n-sub" x="362" y="84">{T('nothing to install')}</text></g>
+          </g>
+          <g class="pill"><rect x="350" y="106" width="200" height="30" rx="15"/><text class="b" x="450" y="126">{T('not needed')}</text></g>
+          <rect class="zone" x="10" y="150" width="880" height="400" rx="18"/>
+          <text class="zone-label" x="34" y="180">{T('Your Wi-Fi')}</text>
+
+          <!-- The computer and the phone sit on one line (y 320), the link between them. -->
+          <g class="node app"><rect x="70" y="220" width="270" height="200" rx="14"/><image href={mark} x="90" y="236" width="28" height="28"/><image href={wordmark} x="126" y="243" width="78" height="14"/><title>ORQWA</title>
+            <g data-k="r-switch"><rect class="sw-track" x="90" y="274" width="40" height="22" rx="11"/><circle class="sw-knob" cx="119" cy="285" r="8" data-off="101"/><text class="n-sub" x="140" y="290">{T('Remote')}</text></g>
+            <text class="n-sub" data-k="r-sub-a" x="205" y="404" text-anchor="middle">{T('shows a QR code')}</text><text class="n-sub" data-k="r-sub-b" x="205" y="404" text-anchor="middle" opacity="0">{T('shifts your gears')}</text></g>
+          <g class="qr" data-k="r-qr" transform="translate(169 306) scale(1.6364)"><rect width="44" height="44" rx="5"/><path fill-rule="evenodd" d="M4 4h12v12H4zM6.5 6.5v7h7v-7zM8.5 8.5h3v3h-3zM28 4h12v12H28zM30.5 6.5v7h7v-7zM32.5 8.5h3v3h-3zM4 28h12v12H4zM6.5 30.5v7h7v-7zM8.5 32.5h3v3h-3zM19 4h3v3h-3zM22 8h3v3h-3zM19 12h3v3h-3zM24 15h3v3h-3zM4 19h3v3H4zM10 19h3v3h-3zM16 21h3v3h-3zM20 19h3v3h-3zM28 19h3v3h-3zM34 21h3v3h-3zM38 18h3v3h-3zM22 26h3v3h-3zM19 33h3v3h-3zM26 31h3v3h-3zM30 28h3v3h-3zM34 33h3v3h-3zM38 28h3v3h-3zM28 37h3v3h-3zM36 38h3v3h-3zM22 38h3v3h-3z"/></g>
+
+          <g data-k="r-link"><line class="ln off" data-draw x1="340" y1="320" x2="664" y2="320" pathLength="1"/><polygon class="ah off" points="664,320 654,315 654,325"/><polygon class="ah off" points="340,320 350,315 350,325"/><text class="lbl" x="502" y="308" text-anchor="middle">{T('direct')}</text></g>
+          {[0, 1, 2].map((i) => <circle class="r-packet" r="6" cx="664" cy="320" data-x1={i === 1 ? 340 : 664} data-y1="320" data-x2={i === 1 ? 664 : 340} data-y2="320" opacity="0"/>)}
+
+          <g data-k="r-phone">
+            <rect class="phone-frame" x="664" y="175" width="138" height="290" rx="16"/>
+            <clipPath id="rclip-d"><rect x="665" y="176" width="136" height="288" rx="15"/></clipPath>
+            <g data-k="r-screen" clip-path="url(#rclip-d)"><svg x="664" y="175" width="138" height="290" viewBox="940 57 818 1725" preserveAspectRatio="xMidYMid slice"><image href={remoteShot} width="3660" height="2880"/></svg></g>
+            <text class="n-title" x="733" y="492" text-anchor="middle">{T('Phone or tablet')}</text>
+            <text class="n-sub" x="733" y="514" text-anchor="middle">{T('in the browser')}</text>
+          </g>
+
+          <!-- Someone else on the Wi-Fi tries to join the link and is stopped below it. -->
+          <g data-k="r-block">
+            <g class="node ghost"><rect x="387" y="452" width="230" height="64" rx="14"/><text class="n-title" x="502" y="480" text-anchor="middle">{T('Others on your Wi-Fi')}</text><text class="n-sub" x="502" y="502" text-anchor="middle">{T("didn't scan the code")}</text></g>
+            <line class="ln no dash" x1="502" y1="452" x2="502" y2="362"/>
+            <path class="no-x" d="M494 340l16 16M510 340l-16 16"/>
+          </g>
+        </svg>
+        <!-- Phones: the same parts, stacked on one centre line. -->
+        <svg class="flow flow-m" id="rflow-m" viewBox="0 0 360 544" role="img" aria-labelledby="rflowm-t">
+          <title id="rflowm-t">{T('How the phone remote connects')}</title>
+          <g class="dim">
+            <rect class="zone" x="4" y="4" width="352" height="88" rx="16"/>
+            <text class="zone-label" x="18" y="27">{T('Internet')}</text>
+            <g class="node"><rect x="100" y="38" width="160" height="48" rx="12"/><text class="n-title" x="112" y="58">{T('App store')}</text><text class="n-sub" x="112" y="77">{T('nothing to install')}</text></g>
+          </g>
+          <g class="pill"><rect x="186" y="10" width="164" height="24" rx="12"/><text class="b" x="268" y="27">{T('not needed')}</text></g>
+          <rect class="zone" x="4" y="104" width="352" height="436" rx="16"/>
+          <text class="zone-label" x="18" y="125">{T('Your Wi-Fi')}</text>
+
+          <!-- Everything on one centre line (x 180): the box, the link and the phone; the others below. -->
+          <g class="node app"><rect x="20" y="136" width="320" height="120" rx="12"/><image href={mark} x="36" y="148" width="22" height="22"/><image href={wordmark} x="66" y="154" width="60" height="11"/><title>ORQWA</title>
+            <g data-k="r-switch"><text class="n-sub" x="282" y="163" text-anchor="end">{T('Remote')}</text><rect class="sw-track" x="290" y="150" width="34" height="18" rx="9"/><circle class="sw-knob" cx="315" cy="159" r="7" data-off="299"/></g>
+            <text class="n-sub" data-k="r-sub-a" x="180" y="244" text-anchor="middle">{T('shows a QR code')}</text><text class="n-sub" data-k="r-sub-b" x="180" y="244" text-anchor="middle" opacity="0">{T('shifts your gears')}</text></g>
+          <g class="qr" data-k="r-qr" transform="translate(156 176) scale(1.0909)"><rect width="44" height="44" rx="5"/><path fill-rule="evenodd" d="M4 4h12v12H4zM6.5 6.5v7h7v-7zM8.5 8.5h3v3h-3zM28 4h12v12H28zM30.5 6.5v7h7v-7zM32.5 8.5h3v3h-3zM4 28h12v12H4zM6.5 30.5v7h7v-7zM8.5 32.5h3v3h-3zM19 4h3v3h-3zM22 8h3v3h-3zM19 12h3v3h-3zM24 15h3v3h-3zM4 19h3v3H4zM10 19h3v3h-3zM16 21h3v3h-3zM20 19h3v3h-3zM28 19h3v3h-3zM34 21h3v3h-3zM38 18h3v3h-3zM22 26h3v3h-3zM19 33h3v3h-3zM26 31h3v3h-3zM30 28h3v3h-3zM34 33h3v3h-3zM38 28h3v3h-3zM28 37h3v3h-3zM36 38h3v3h-3zM22 38h3v3h-3z"/></g>
+
+          <g data-k="r-link"><line class="ln off" data-draw x1="180" y1="256" x2="180" y2="290" pathLength="1"/><polygon class="ah off" points="180,290 175,280 185,280"/><polygon class="ah off" points="180,256 175,266 185,266"/></g>
+          {[0, 1, 2].map((i) => <circle class="r-packet" r="5" cx="180" cy="290" data-x1="180" data-y1={i === 1 ? 256 : 290} data-x2="180" data-y2={i === 1 ? 290 : 256} opacity="0"/>)}
+
+          <g data-k="r-phone">
+            <rect class="phone-frame" x="145" y="290" width="71" height="150" rx="8"/>
+            <clipPath id="rclip-m"><rect x="146" y="291" width="69" height="148" rx="7"/></clipPath>
+            <g data-k="r-screen" clip-path="url(#rclip-m)"><svg x="145" y="290" width="71" height="150" viewBox="940 57 818 1725" preserveAspectRatio="xMidYMid slice"><image href={remoteShot} width="3660" height="2880"/></svg></g>
+            <text class="n-title" x="180" y="459" text-anchor="middle">{T('Phone or tablet')}</text>
+            <text class="n-sub" x="180" y="476" text-anchor="middle">{T('in the browser')}</text>
+          </g>
+
+          <g data-k="r-block">
+            <g class="node ghost"><rect x="40" y="486" width="280" height="48" rx="12"/><text class="n-title" x="180" y="505" text-anchor="middle">{T('Others on your Wi-Fi')}</text><text class="n-sub" x="180" y="523" text-anchor="middle">{T("didn't scan the code")}</text></g>
+            <line class="ln no dash" x1="292" y1="486" x2="292" y2="290"/>
+            <path class="no-x" d="M284 266l16 16M300 266l-16 16"/>
+          </g>
+        </svg>
+      </figure>
       <div class="step-dots" role="group" aria-label={T('Steps')} hidden></div>
     </div>
   </div>

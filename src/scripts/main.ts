@@ -1,4 +1,5 @@
 import { initLang } from './lang';
+import { initLinks } from './links';
 import { initBar } from './bar';
 import { initHero } from './hero';
 import { initPlatform } from './platform';
@@ -8,6 +9,7 @@ import { initReels } from './reels';
 import { initMotion } from './motion';
 
 initLang();
+initLinks();
 initBar();
 initHero();
 initPlatform();
