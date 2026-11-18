@@ -601,8 +601,10 @@ footer { border-top: 1px solid var(--line); padding-block: 48px 56px; color: var
 .bar { view-transition-name: bar; }
 @media (prefers-reduced-motion: reduce) { @view-transition { navigation: none; } }
 
-.not-found { min-height: 70svh; display: grid; place-content: center; text-align: center; gap: 18px; padding-top: var(--bar); }
-.not-found img { width: min(320px, 70vw); height: auto; margin-inline: auto; }
+/* Fills the screen, with equal space above and below, so the content sits midway between the bar and the bottom edge. */
+.not-found { --gap: clamp(40px, 6vw, 80px); min-height: 100svh; display: grid; place-content: center; text-align: center; gap: 18px; padding-block: calc(var(--bar) + var(--gap)) var(--gap); }
+/* The artwork sits 2% right of centre in its PNG (more transparent margin on the left), so it is moved back. */
+.not-found img { width: min(320px, 70vw); height: auto; margin-inline: auto; translate: -2% 0; }
 
 .h3 { font-size: 1.2rem; font-stretch: 92%; letter-spacing: -.01em; line-height: 1.25; }
 .sec-head h1 { font-size: clamp(2.3rem, 4.6vw, 3.8rem); }
