@@ -1,0 +1,34 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import { t, pageUrl, type Lang } from '../i18n';
+// Read from ../orqwa/docs through the orqwa-docs link, like the screenshots.
+import orca from '../../orqwa-docs/images/cycling-orca.png';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const T = (en: string) => t(lang, en);
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const de404 = `${base}de/404/`;
+---
+<Base lang={lang} title={T('Page not found · ORQWA')} description={T('This page does not exist, or it has moved.')} noindex>
+  {lang === 'en' && (
+    <script is:inline slot="head" define:vars={{ base, de404 }}>
+      // GitHub Pages serves this page for every missing URL, so German visitors are sent on to the
+      // German one: for a missing /de/ URL, or by the same rule as the other English pages.
+      try {
+        var chosen = localStorage.getItem('orqwa-lang');
+      } catch (e) {}
+      if (location.pathname.indexOf(base + 'de/') === 0 || chosen === 'de' ||
+          (!chosen && /^de\b/i.test(navigator.language || ''))) location.replace(de404);
+    </script>
+  )}
+  <div class="wrap not-found">
+    <Image src={orca} alt={T('A cartoon orca on a road bike, with the caption ORQWARD')} widths={[320, 640]}
+      sizes="(max-width: 480px) 70vw, 320px" format="webp" loading="eager" />
+    <h1>{T('Well, this is orqward.')}</h1>
+    <p class="lede">{T("We couldn't find the page you're looking for. It may have moved, or it never existed.")}</p>
+    <p><a class="btn btn-primary" href={pageUrl(lang, 'home')}>{T('Back to the start page')}</a></p>
+  </div>
+  <div class="page-end"></div>
+</Base>

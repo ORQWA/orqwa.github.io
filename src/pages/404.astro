@@ -1,17 +1,4 @@
 ---
-import { Image } from 'astro:assets';
-import Base from '../layouts/Base.astro';
-import { pageUrl } from '../i18n';
-// Read from ../orqwa/docs through the orqwa-docs link, like the screenshots.
-import orca from '../../orqwa-docs/images/cycling-orca.png';
+import NotFound from '../views/NotFound.astro';
 ---
-<Base lang="en" title="Page not found · ORQWA" description="This page does not exist, or it has moved." noindex>
-  <div class="wrap not-found">
-    <Image src={orca} alt="A cartoon orca on a road bike, with the caption ORQWARD" widths={[320, 640]}
-      sizes="(max-width: 480px) 70vw, 320px" format="webp" loading="eager" />
-    <h1>Well, this is orqward.</h1>
-    <p class="lede">We couldn't find the page you're looking for. It may have moved, or it never existed.</p>
-    <p lang="de" class="lede">Wir konnten die gesuchte Seite nicht finden. Vielleicht wurde sie verschoben, oder es gab sie nie.</p>
-    <p><a class="btn btn-primary" href={pageUrl('en', 'home')}>Back to the start page</a></p>
-  </div>
-</Base>
+<NotFound lang="en" />
