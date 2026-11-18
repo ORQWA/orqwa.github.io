@@ -602,6 +602,7 @@ footer { border-top: 1px solid var(--line); padding-block: 48px 56px; color: var
 @media (prefers-reduced-motion: reduce) { @view-transition { navigation: none; } }
 
 .not-found { min-height: 70svh; display: grid; place-content: center; text-align: center; gap: 18px; padding-top: var(--bar); }
+.not-found img { width: min(320px, 70vw); height: auto; margin-inline: auto; }
 
 .h3 { font-size: 1.2rem; font-stretch: 92%; letter-spacing: -.01em; line-height: 1.25; }
 .sec-head h1 { font-size: clamp(2.3rem, 4.6vw, 3.8rem); }
