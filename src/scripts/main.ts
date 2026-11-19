@@ -1,21 +1,20 @@
 import { initLang } from './lang';
 import { initLinks } from './links';
 import { initBar } from './bar';
-import { initClimb } from './climb';
 import { initHero } from './hero';
 import { initPlatform } from './platform';
 import { initRelease } from './release';
 import { initStars } from './stars';
 import { initReels } from './reels';
 import { initMotion } from './motion';
+import { initRide } from './ride';
 
 initLang();
 initLinks();
 initBar();
 initHero();
 initPlatform();
-initClimb();
 initRelease();
 initStars();
 const reels = initReels();
-initMotion(reels);
+initMotion(reels, initRide());

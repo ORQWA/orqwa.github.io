@@ -71,28 +71,6 @@ const firstRide = [
   ['Save Your Ride', 'Choose <b>Finish &amp; save</b>. Your ride appears under <b>History</b>.'],
 ];
 
-// The first ride as a climb: the first course's real elevation profile (x 0–1000 by distance, y
-// 8–92 from the top by height) and one waypoint per step, spread along it.
-const { length_m: courseLength, profile: course } = firstCourse;
-const low = Math.min(...course.map(([, m]) => m));
-const high = Math.max(...course.map(([, m]) => m));
-const profile = course.map(([d, m]) => [
-  Math.round((d / courseLength) * 10000) / 10,
-  Math.round((92 - ((m - low) / (high - low)) * 84) * 10) / 10,
-]);
-const yAt = (x: number) => {
-  const i = Math.max(0, profile.findIndex(([px]) => px >= x) - 1);
-  const [x1, y1] = profile[i];
-  const [x2, y2] = profile[i + 1] ?? profile[i];
-  return x2 === x1 ? y1 : y1 + ((x - x1) / (x2 - x1)) * (y2 - y1);
-};
-const line = profile.map((p) => p.join(',')).join(' ');
-const area = `0,100 ${line} 1000,100`;
-const waypoints = firstRide.map((_, i) => {
-  const x = (0.04 + (i * 0.92) / (firstRide.length - 1)) * 1000;
-  return { left: x / 10, top: yAt(x) };
-});
-const [start, summit] = [course[0][1], course[course.length - 1][1]];
 ---
 <section class="dl" id="download" aria-labelledby="dl-h">
   <div class="wrap">
@@ -154,28 +132,17 @@ const [start, summit] = [course[0][1], course[course.length - 1][1]];
       <p class="try" set:html={T('Just want to try? Turn on <b>Fake trainer</b> under Devices and ride without any hardware.')} />
     </div>
     <div class="ride" id="ride">
-      <ol class="ride-steps" id="ride-steps">
-        {firstRide.map(([title, text]) => (
-          <li><h3 class="h3">{T(title)}</h3><p set:html={T(text)} /></li>
-        ))}
-      </ol>
-      <p class="stuck">{T('Stuck?')} <a class="ext" href="https://github.com/ORQWA/ORQWA/wiki/Getting-started" {...ext}>{T('See the full guide')}</a>.</p>
-      <div class="climb" aria-hidden="true">
-        <div class="plot" id="ride-plot">
-          <svg class="track" viewBox="0 0 1000 100" preserveAspectRatio="none">
-            <polygon points={area} /><polyline points={line} vector-effect="non-scaling-stroke" />
-          </svg>
-          <svg class="done" viewBox="0 0 1000 100" preserveAspectRatio="none">
-            <defs><linearGradient id="ride-fill" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#2EB0FF" stop-opacity=".22" /><stop offset="1" stop-color="#2EB0FF" stop-opacity="0" />
-            </linearGradient></defs>
-            <polygon points={area} fill="url(#ride-fill)" /><polyline points={line} vector-effect="non-scaling-stroke" />
-          </svg>
-          {waypoints.map((w) => <span class="wp" style={`left:${w.left}%;top:${w.top.toFixed(2)}%`} />)}
-          <span class="rider" />
-          <span class="flag"><span class="num">1</span><span class="name" /></span>
-        </div>
-        <div class="names"><span>Twann <span class="m">{start} m</span></span><span>Chasseral <span class="m">{summit} m</span></span></div>
+      <div class="route" id="ride-route" aria-hidden="true" data-route={JSON.stringify(firstCourse.route)}>
+        <span class="place">Twann <span class="m">{firstCourse.start_m} m</span></span>
+        <span class="place">Chasseral <span class="m">{firstCourse.summit_m} m</span></span>
+      </div>
+      <div class="ride-text">
+        <ol class="ride-steps" id="ride-steps">
+          {firstRide.map(([title, text]) => (
+            <li><h3 class="h3">{T(title)}</h3><p set:html={T(text)} /></li>
+          ))}
+        </ol>
+        <p class="stuck">{T('Stuck?')} <a class="ext" href="https://github.com/ORQWA/ORQWA/wiki/Getting-started" {...ext}>{T('See the full guide')}</a>.</p>
       </div>
     </div>
   </div>
