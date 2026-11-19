@@ -712,17 +712,22 @@ footer { border-top: 1px solid var(--line); padding-block: 48px 56px; color: var
 .plot .rider, .plot .flag { pointer-events: none; }
 /* Narrower screens: the climb becomes a band pinned under the bar, above the steps, with the place
    names under the line. The line keeps clear of the band's edges, so the flag at the summit and the
-   rider at either end have room. */
+   rider at either end have room. The band also fills the space behind the see-through bar, so the
+   steps don't show through it; the heading above stays in front of that fill. Once the last step
+   comes up under the band, the band lets go and scrolls away with the steps, so the last step shows
+   whole: its margin, --release (src/scripts/climb.ts), ends the pin there, and the steps take the
+   same space back. */
 @media (max-width: 899.98px) {
-  .first-ride { --flag-room: 58px; --plot: 64px; --names: 26px; --band-x: 14px; --band-b: 12px; }
+  .first-ride { --flag-room: 58px; --plot: 64px; --names: 26px; --band-x: 14px; --band-b: 12px; --pin: calc(var(--bar) + env(safe-area-inset-top, 0px)); }
+  .first-ride .sec-head { position: relative; z-index: 3; }
   .ride { grid-template-columns: minmax(0, 1fr); row-gap: 28px; }
   .climb {
-    grid-column: 1; grid-row: 1; top: var(--bar); z-index: 2; margin-top: 0; height: calc(var(--climb) + var(--band-b));
-    background: var(--deep); border-bottom: 1px solid var(--line); box-shadow: 0 0 0 100vmax var(--deep); clip-path: inset(0 -100vmax);
+    grid-column: 1; grid-row: 1; top: var(--pin); z-index: 2; margin-block: 0 var(--release, 0px); height: calc(var(--climb) + var(--band-b));
+    background: var(--deep); border-bottom: 1px solid var(--line); box-shadow: 0 0 0 100vmax var(--deep); clip-path: inset(calc(var(--pin) * -1) -100vmax 0);
   }
   .plot { inset: var(--flag-room) var(--band-x) calc(var(--names) + var(--band-b)); }
   .climb .names { inset: auto var(--band-x) var(--band-b); font-size: 12.5px; }
-  .ride-steps { grid-row: 2; }
+  .ride-steps { grid-row: 2; margin-top: calc(var(--release, 0px) * -1); }
   .ride .stuck { grid-row: 3; padding-left: 0; }
   .plot .flag { font-size: 13px; }
 }

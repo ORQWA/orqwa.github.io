@@ -1,6 +1,7 @@
 import { initLang } from './lang';
 import { initLinks } from './links';
 import { initBar } from './bar';
+import { initClimb } from './climb';
 import { initHero } from './hero';
 import { initPlatform } from './platform';
 import { initRelease } from './release';
@@ -13,6 +14,7 @@ initLinks();
 initBar();
 initHero();
 initPlatform();
+initClimb();
 initRelease();
 initStars();
 const reels = initReels();
