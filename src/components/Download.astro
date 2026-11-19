@@ -2,6 +2,7 @@
 import { t, dateLocale, type Lang } from '../i18n';
 import { getRelease } from '../lib/release';
 import { formatDate, mb, RELEASES_PAGE, type Slot } from '../lib/assets';
+import firstCourse from '../lib/first-course.json';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -26,7 +27,7 @@ const platforms = [
     steps: [
       'Unzip the download and open <b>ORQWA</b>.',
       'If macOS blocks it, close the warning with <b>Done</b>.',
-      'Open <b>System Settings → Privacy &amp; Security</b>. Under Security, find the message about ORQWA and choose <b>Open Anyway</b>.',
+      'Open <b>Privacy &amp; Security</b> in <b>System Settings</b>. Under Security, find the message about ORQWA and choose <b>Open Anyway</b>.',
       'Confirm with your password or Touch ID, then choose <b>Open Anyway</b> again.',
     ],
     note: 'This will happen again after every update. ORQWA runs on Macs with Apple silicon only.',
@@ -35,9 +36,9 @@ const platforms = [
     os: 'windows', tab: 'Windows', button: 'Download for Windows', needs: '64-bit<small>Windows</small>',
     alt: { slot: 'windows-zip', label: 'Portable version, no install needed' },
     steps: [
-      'Run the <b>.msi</b> installer, then open ORQWA from the Start menu.',
-      'On “Windows protected your PC”, choose <b>More info → Run anyway</b>.',
-      'If Smart App Control blocks it without that option, ORQWA only runs with Smart App Control turned off under <b>Windows Security → App &amp; browser control</b>.',
+      'Run the <b>.msi</b> installer, then open <b>ORQWA</b> from the Start menu.',
+      'On “Windows protected your PC”, choose <b>More info</b>, then <b>Run anyway</b>.',
+      'If Smart App Control blocks it without that option, ORQWA only runs with Smart App Control turned off under <b>App &amp; browser control</b> in <b>Windows Security</b>.',
     ],
     note: 'For the portable version, unzip it and keep all its files together in one folder.',
   },
@@ -54,7 +55,7 @@ const platforms = [
     os: 'android', tab: 'Android', button: 'Download for Android', needs: '10+<small>64-bit</small>',
     steps: [
       'Open the download on your Android device. Allow your browser or file manager to <b>install unknown apps</b>, then return and choose <b>Install</b>.',
-      'If Play Protect warns, choose <b>More details → Install anyway</b>.',
+      'If Play Protect warns, choose <b>More details</b>, then <b>Install anyway</b>.',
       'Allow <b>Nearby devices</b> to connect trainers and sensors. Before Android 12 this is called Location; ORQWA does not read your location.',
     ],
     note: "For Android 10 or newer. Uninstalling deletes ORQWA's data on the device, so export rides you want to keep first.",
@@ -65,10 +66,33 @@ const firstRide = [
   ['Wake Your Trainer', 'Turn on Bluetooth and wake your trainer by pedalling.'],
   ['Connect It', 'Open <b>Devices</b>, press <b>Search</b> beside the trainer and wait for <b>Connected</b>.'],
   ['Set Up Your Profile', 'Open <b>Profile</b>, press the pencil and enter your weight, FTP (the power you can hold for about an hour) and maximum heart rate.'],
-  ['Pick a Course', 'Open <b>Courses → Twann – Chasseral</b>. When it is ready, press <b>Ride</b>.'],
-  ['Ride', 'Pedal to ride. <b>P</b> or space pauses, <b>S</b> opens ride settings.'],
+  ['Pick a Course', 'Open <b>Twann – Chasseral</b> under <b>Courses</b>. When it is ready, press <b>Ride</b>.'],
+  ['Ride', 'Pedal to ride. Pause and ride settings are in the controls at the bottom left.'],
   ['Save Your Ride', 'Choose <b>Finish &amp; save</b>. Your ride appears under <b>History</b>.'],
 ];
+
+// The first ride as a climb: the first course's real elevation profile (x 0–1000 by distance, y
+// 8–92 from the top by height) and one waypoint per step, spread along it.
+const { length_m: courseLength, profile: course } = firstCourse;
+const low = Math.min(...course.map(([, m]) => m));
+const high = Math.max(...course.map(([, m]) => m));
+const profile = course.map(([d, m]) => [
+  Math.round((d / courseLength) * 10000) / 10,
+  Math.round((92 - ((m - low) / (high - low)) * 84) * 10) / 10,
+]);
+const yAt = (x: number) => {
+  const i = Math.max(0, profile.findIndex(([px]) => px >= x) - 1);
+  const [x1, y1] = profile[i];
+  const [x2, y2] = profile[i + 1] ?? profile[i];
+  return x2 === x1 ? y1 : y1 + ((x - x1) / (x2 - x1)) * (y2 - y1);
+};
+const line = profile.map((p) => p.join(',')).join(' ');
+const area = `0,100 ${line} 1000,100`;
+const waypoints = firstRide.map((_, i) => {
+  const x = (0.04 + (i * 0.92) / (firstRide.length - 1)) * 1000;
+  return { left: x / 10, top: yAt(x) };
+});
+const [start, summit] = [course[0][1], course[course.length - 1][1]];
 ---
 <section class="dl" id="download" aria-labelledby="dl-h">
   <div class="wrap">
@@ -107,6 +131,7 @@ const firstRide = [
           <h2 class="h3">{T('Install')}</h2>
           <ol class="install">
             {p.steps.map((s) => <li><span set:html={T(s)} /></li>)}
+            <li><a href="#first-ride">{T('Start your first ride')}</a></li>
           </ol>
           <p class="note">{T(p.note)}</p>
         </div>
@@ -122,14 +147,36 @@ const firstRide = [
   </div>
 </section>
 
-<section class="first-ride" aria-labelledby="first-h">
+<section class="first-ride" id="first-ride" aria-labelledby="first-h">
   <div class="wrap">
-    <div class="sec-head"><h2 id="first-h">{T('Your First Ride')}</h2></div>
-    <ol class="steps timeline" id="first-steps">
-      {firstRide.map(([title, text]) => (
-        <li><h3 class="h3">{T(title)}</h3><p set:html={T(text)} /></li>
-      ))}
-    </ol>
-    <p class="try" set:html={T('Just want to try? Turn on <b>Fake trainer</b> under Devices and ride without any hardware.')} />
+    <div class="sec-head">
+      <h2 id="first-h">{T('Your First Ride')}</h2>
+      <p class="try" set:html={T('Just want to try? Turn on <b>Fake trainer</b> under Devices and ride without any hardware.')} />
+    </div>
+    <div class="ride" id="ride">
+      <ol class="ride-steps" id="ride-steps">
+        {firstRide.map(([title, text]) => (
+          <li><h3 class="h3">{T(title)}</h3><p set:html={T(text)} /></li>
+        ))}
+      </ol>
+      <p class="stuck">{T('Stuck?')} <a class="ext" href="https://github.com/ORQWA/ORQWA/wiki/Getting-started" {...ext}>{T('See the full guide')}</a>.</p>
+      <div class="climb" aria-hidden="true">
+        <div class="plot" id="ride-plot">
+          <svg class="track" viewBox="0 0 1000 100" preserveAspectRatio="none">
+            <polygon points={area} /><polyline points={line} vector-effect="non-scaling-stroke" />
+          </svg>
+          <svg class="done" viewBox="0 0 1000 100" preserveAspectRatio="none">
+            <defs><linearGradient id="ride-fill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#2EB0FF" stop-opacity=".22" /><stop offset="1" stop-color="#2EB0FF" stop-opacity="0" />
+            </linearGradient></defs>
+            <polygon points={area} fill="url(#ride-fill)" /><polyline points={line} vector-effect="non-scaling-stroke" />
+          </svg>
+          {waypoints.map((w) => <span class="wp" style={`left:${w.left}%;top:${w.top.toFixed(2)}%`} />)}
+          <span class="rider" />
+          <span class="flag"><span class="num">1</span><span class="name" /></span>
+        </div>
+        <div class="names"><span>Twann <span class="m">{start} m</span></span><span>Chasseral <span class="m">{summit} m</span></span></div>
+      </div>
+    </div>
   </div>
 </section>

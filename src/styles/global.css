@@ -539,7 +539,9 @@ td { color: var(--muted); }
   content: counter(i); width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center;
   font: 500 12px var(--f-mono); color: var(--accent-hi); border: 1px solid rgba(46, 176, 255, .45);
 }
-.install b { color: var(--text); font-weight: 600; }
+/* The last install step leads on to the first ride, further down the page. */
+.install a { font-weight: 500; text-decoration: none; }
+.install a:hover { text-decoration: underline; }
 .note { font-size: 14px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; }
 /* The note sits at the bottom of the install box in a space of fixed height, so its line is at
    the same height on every platform: room for the longest note, measured per language and width. */
@@ -645,7 +647,85 @@ footer { border-top: 1px solid var(--line); padding-block: 48px 56px; color: var
 .timeline li.is-on::before { background: var(--accent-hi); border-color: var(--accent-hi); color: var(--on-accent); }
 .timeline.is-live li.is-on::before { transform: scale(1.15); box-shadow: 0 0 18px rgba(46, 176, 255, .45); }
 .try { margin-top: 48px; text-align: center; color: var(--muted); }
-.try b { color: var(--text); font-weight: 600; }
+/* Names on screen (buttons, menus, keys, courses) sit in a small box, inline with the sentence. */
+.install b, .ride-steps p b, .try b {
+  color: var(--text); font-weight: 600; padding: .06em .42em; border-radius: 6px;
+  background: rgba(150, 190, 240, .08); border: 1px solid var(--line);
+  -webkit-box-decoration-break: clone; box-decoration-break: clone;
+}
+
+/* The first ride as a climb. Under the heading, centred like the other section heads, the tip for
+   riders without a trainer, before they reach step 1. Steps on the left; the climb on the right, its line level with the first step. The climb sticks with its middle
+   on the middle of the window below the bar, the line the steps are read on; the rider rides to the
+   step there and carries its name on a flag (src/scripts/motion.ts). Without motion the climb shows
+   complete, without rider or flag. */
+.first-ride { --flag-room: 52px; --plot: 200px; --names: 30px; --climb: calc(var(--flag-room) + var(--plot) + var(--names)); }
+/* The tip lines up with its heading like a lede: centred, and on the left edge on phones (below). */
+.first-ride .try { margin: 0; max-width: 60ch; text-align: inherit; text-wrap: pretty; }
+@media (min-width: 600.02px) { .first-ride .sec-head { gap: 14px; margin-bottom: 48px; } }
+.ride { --p: 1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); column-gap: clamp(40px, 6vw, 88px); align-items: start; }
+.ride-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 36px; counter-reset: r; }
+/* The number and the title share a row and a centre line; the text hangs under the title. */
+.ride-steps li { counter-increment: r; display: grid; grid-template-columns: 32px minmax(0, 1fr); column-gap: 16px; row-gap: 6px; }
+.ride-steps li::before {
+  content: counter(r); grid-row: 1; width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center;
+  font: 500 14px var(--f-mono); color: var(--accent-hi); background: var(--deep); border: 1px solid rgba(46, 176, 255, .45);
+  transition: background .3s, color .3s, border-color .3s, box-shadow .3s;
+}
+/* After the steps, help for whoever gets stuck, on the step text's left edge. */
+.ride .stuck { grid-column: 1; grid-row: 2; margin-top: 36px; padding-left: 48px; color: var(--muted); font-size: 15.5px; }
+.ride .stuck a { font-weight: 500; text-decoration: none; }
+.ride .stuck a:hover { text-decoration: underline; }
+/* Only the current step is marked; the ones above are read, not done. */
+.ride-steps li.is-cur::before { background: var(--accent-hi); border-color: var(--accent-hi); color: var(--on-accent); box-shadow: 0 0 18px rgba(46, 176, 255, .45); }
+.ride-steps .h3 { grid-column: 2; align-self: center; }
+.ride-steps p { grid-column: 2; color: var(--muted); font-size: 15.5px; }
+.climb { grid-column: 2; grid-row: 1; position: sticky; top: calc(var(--bar) + (100vh - var(--bar)) / 2 - var(--climb) / 2); height: var(--climb); margin-top: calc(var(--flag-room) * -1); }
+.plot { position: absolute; inset: var(--flag-room) 0 var(--names); }
+.plot svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.plot polyline { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.plot .track polygon { fill: rgba(150, 190, 240, .03); }
+.plot .track polyline { stroke: var(--line); }
+.plot .done { clip-path: inset(-12px calc((1 - var(--p)) * 100%) -12px 0); }
+.plot .done polyline { stroke: var(--accent-hi); }
+.plot .wp, .plot .rider { position: absolute; transform: translate(-50%, -50%); border-radius: 50%; }
+.plot .wp { width: 9px; height: 9px; background: var(--accent-hi); border: 1px solid var(--accent-hi); transition: background .3s, border-color .3s; }
+.ride.is-live .wp:not(.is-on) { background: var(--deep); border-color: rgba(150, 190, 240, .35); }
+.plot .rider { width: 11px; height: 11px; background: #fff; box-shadow: 0 0 0 5px rgba(46, 176, 255, .25), 0 0 16px rgba(46, 176, 255, .8); z-index: 1; }
+/* The flag hangs on a short stem straight above the rider; near the ends it slides along the stem's
+   foot (--fx) so it never runs past the climb's edges. */
+.plot .flag {
+  position: absolute; z-index: 2; white-space: nowrap; pointer-events: none;
+  transform: translate(calc(var(--fx, 0) * -100%), calc(-100% - 18px));
+  display: flex; gap: 8px; align-items: center; padding: 4px 12px 4px 4px; border-radius: 999px;
+  background: #13203A; border: 1px solid rgba(46, 176, 255, .4); font-size: 14px; font-weight: 600; font-stretch: 92%; line-height: 1.3;
+}
+.plot .flag::after { content: ""; position: absolute; top: 100%; left: calc(var(--fx, 0) * 100%); width: 1px; height: 13px; background: rgba(46, 176, 255, .55); }
+.plot .flag .num { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; background: var(--accent-hi); color: var(--on-accent); font: 500 12px var(--f-mono); }
+.ride:not(.is-live) :is(.rider, .flag) { display: none; }
+.climb .names { position: absolute; inset: auto 0 0; height: var(--names); display: flex; justify-content: space-between; align-items: end; font-size: 13px; color: var(--muted); }
+.climb .names .m { color: var(--text); font-variant-numeric: tabular-nums; margin-left: 4px; }
+/* A waypoint takes you to its step; its hit area is larger than the dot. */
+.plot .wp { cursor: pointer; }
+.plot .wp::after { content: ""; position: absolute; inset: -12px; border-radius: 50%; }
+.plot .wp:hover { border-color: var(--accent-hi); }
+.plot .rider, .plot .flag { pointer-events: none; }
+/* Narrower screens: the climb becomes a band pinned under the bar, above the steps, with the place
+   names under the line. The line keeps clear of the band's edges, so the flag at the summit and the
+   rider at either end have room. */
+@media (max-width: 899.98px) {
+  .first-ride { --flag-room: 58px; --plot: 64px; --names: 26px; --band-x: 14px; --band-b: 12px; }
+  .ride { grid-template-columns: minmax(0, 1fr); row-gap: 28px; }
+  .climb {
+    grid-column: 1; grid-row: 1; top: var(--bar); z-index: 2; margin-top: 0; height: calc(var(--climb) + var(--band-b));
+    background: var(--deep); border-bottom: 1px solid var(--line); box-shadow: 0 0 0 100vmax var(--deep); clip-path: inset(0 -100vmax);
+  }
+  .plot { inset: var(--flag-room) var(--band-x) calc(var(--names) + var(--band-b)); }
+  .climb .names { inset: auto var(--band-x) var(--band-b); font-size: 12.5px; }
+  .ride-steps { grid-row: 2; }
+  .ride .stuck { grid-row: 3; padding-left: 0; }
+  .plot .flag { font-size: 13px; }
+}
 
 /* Timeline pills coloured like the diagram lines: blue online, green on your device, purple sync. */
 .timeline li.c-on::before { color: var(--accent-hi); border-color: rgba(46, 176, 255, .5); }

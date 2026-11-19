@@ -15,19 +15,22 @@ export function initMotion(reels: HTMLElement[]) {
   gsap.ticker.add((t) => lenis.raf(t * 1000));
   gsap.ticker.lagSmoothing(0);
   document.addEventListener('orqwa:modal', (e) => ((e as CustomEvent<boolean>).detail ? lenis.stop() : lenis.start()));
+  // Set below, once the first ride is ready: its link lands on step 1, not on the section's top.
+  let rideTo: ((i: number, duration?: number) => void) | undefined;
   document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach((a) =>
     a.addEventListener('click', (e) => {
       const id = a.getAttribute('href')!;
       const el = id.length > 1 ? document.querySelector<HTMLElement>(id) : null;
       if (!el) return;
       e.preventDefault();
-      lenis.scrollTo(el, { duration: 1.4 });
+      if (id === '#first-ride' && rideTo) rideTo(0, 1.4);
+      else lenis.scrollTo(el, { duration: 1.4 });
     }),
   );
 
   hero();
   features();
-  timeline();
+  rideTo = ride(lenis);
   const mm = gsap.matchMedia();
   // Screens: pinned and run by scrolling on every width; phones get a shorter, snappier stretch.
   mm.add({ wide: '(min-width: 900px)', phone: '(max-width: 899.98px)' }, (ctx) =>
@@ -107,31 +110,89 @@ function screens(reels: HTMLElement[], lenis: Lenis, phone = false) {
   };
 }
 
-/** First ride: the step nearest the middle of the window is active, the line fills up to it. */
-function timeline() {
-  const list = document.getElementById('first-steps');
-  if (!list) return;
-  const steps = [...list.querySelectorAll<HTMLElement>('li')];
-  list.classList.add('is-live');
-  let queued = false;
-  const update = () => {
-    queued = false;
-    const mid = innerHeight * 0.5;
-    let active = steps[0];
-    let best = Infinity;
-    for (const li of steps) {
-      const d = Math.abs(li.getBoundingClientRect().top + 16 - mid);
-      if (d < best) { best = d; active = li; }
-    }
-    steps.forEach((li) => li.classList.toggle('is-on', li === active));
-    list.style.setProperty('--total', `${steps[steps.length - 1].offsetTop}px`);
-    const top = list.getBoundingClientRect().top;
-    list.style.setProperty('--fill', `${Math.max(0, active.getBoundingClientRect().top - top)}px`);
+/**
+ * First ride: the step whose title is on the middle of the window (below the bar) is current. The
+ * rider rides from waypoint to waypoint between two titles and carries the current step on its flag.
+ */
+function ride(lenis: Lenis) {
+  const root = document.getElementById('ride');
+  const plot = document.getElementById('ride-plot');
+  const list = document.getElementById('ride-steps');
+  if (!root || !plot || !list) return;
+  const lis = [...list.querySelectorAll<HTMLElement>('li')];
+  const titles = lis.map((li) => li.querySelector('.h3')?.textContent ?? '');
+  const wps = [...plot.querySelectorAll<HTMLElement>('.wp')];
+  const rider = plot.querySelector<HTMLElement>('.rider')!;
+  const flag = plot.querySelector<HTMLElement>('.flag')!;
+  const num = flag.querySelector('.num')!;
+  const name = flag.querySelector('.name')!;
+  const pts = plot.querySelector('polyline')!.getAttribute('points')!.split(' ').map((p) => p.split(',').map(Number));
+  const yAt = (x: number) => {
+    const i = Math.max(0, pts.findIndex((p) => p[0] >= x) - 1);
+    const [[x1, y1], [x2, y2]] = [pts[i], pts[i + 1] ?? pts[i]];
+    return x2 === x1 ? y1 : y1 + ((x - x1) / (x2 - x1)) * (y2 - y1);
   };
-  const queue = () => { if (!queued) { queued = true; requestAnimationFrame(update); } };
-  addEventListener('scroll', queue, { passive: true });
-  addEventListener('resize', queue);
+  // The waypoints' x along the climb, as Download.astro places them.
+  const xs = wps.map((w) => parseFloat(w.style.left) / 100);
+  const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
+  root.classList.add('is-live');
+
+  /**
+   * Where the middle of the window (below the bar) is in the list, now: `rel`, and once scrolled to
+   * the end: `end`. The section ends the page, so where the page runs out before the last title
+   * reaches the middle, the ride from `from` to `to` is spread over the scrolling that is left and
+   * the rider still summits.
+   */
+  const measure = () => {
+    const bar = document.getElementById('bar')?.offsetHeight ?? 0;
+    const top = list.getBoundingClientRect().top;
+    const tops = lis.map((li) => li.getBoundingClientRect().top + 16 - top);
+    const rel = bar + (innerHeight - bar) / 2 - top;
+    const end = rel + Math.max(0, document.documentElement.scrollHeight - innerHeight - scrollY);
+    const from = tops[0] - 240;
+    const to = tops[tops.length - 1] + 160;
+    const squeezed = end < to && end > from;
+    return { tops, rel, end, from, to, squeezed };
+  };
+
+  let cur = -2;
+  const update = () => {
+    const m = measure();
+    const { tops, end, from, to, squeezed } = m;
+    let { rel } = m;
+    const last = tops.length - 1;
+    if (squeezed && rel > from) rel = from + ((rel - from) * (to - from)) / (end - from);
+    let p: number;
+    if (rel < tops[0]) p = xs[0] * clamp(1 - (tops[0] - rel) / 240, 0, 1);
+    else if (rel >= tops[last]) p = xs[last] + (1 - xs[last]) * clamp((rel - tops[last]) / 160, 0, 1);
+    else {
+      const i = tops.findIndex((t, j) => rel >= t && rel < tops[j + 1]);
+      p = xs[i] + ((rel - tops[i]) / (tops[i + 1] - tops[i])) * (xs[i + 1] - xs[i]);
+    }
+    const y = yAt(p * 1000);
+    root.style.setProperty('--p', p.toFixed(4));
+    for (const el of [rider, flag]) { el.style.left = `${p * 100}%`; el.style.top = `${y}%`; }
+    flag.style.setProperty('--fx', p.toFixed(3));
+    const n = xs.filter((x) => p >= x - 1e-4).length - 1;
+    wps.forEach((w, i) => w.classList.toggle('is-on', i <= n));
+    lis.forEach((li, i) => li.classList.toggle('is-cur', i === n));
+    const shown = Math.max(0, n);
+    if (shown === cur) return;
+    cur = shown;
+    num.textContent = String(shown + 1);
+    name.textContent = titles[shown];
+  };
+  ScrollTrigger.create({ trigger: list, start: 'top bottom', end: 'bottom top', onUpdate: update, onRefresh: update });
+  /** Scrolls to where step i has just become current: its title on the middle of the window. */
+  const goTo = (i: number, duration = 0.9) => {
+    const { tops, rel, end, from, to, squeezed } = measure();
+    let want = tops[i] + 2;
+    if (squeezed && want > from) want = from + ((want - from) * (end - from)) / (to - from);
+    lenis.scrollTo(scrollY + want - rel, { duration });
+  };
+  wps.forEach((w, i) => w.addEventListener('click', () => goTo(i)));
   update();
+  return goTo;
 }
 
 /**
