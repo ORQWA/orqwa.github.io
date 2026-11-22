@@ -7,11 +7,11 @@ const { lang } = Astro.props;
 const T = (en: string) => t(lang, en);
 ---
 <Base lang={lang} page="privacy" title={T('Privacy · ORQWA')}
-  description={T('What data is processed when you visit the ORQWA website: no tracking, no analytics, no cookies.')}>
+  description={T('What data is processed when you visit the ORQWA website, including Umami analytics without cookies.')}>
   <div class="wrap credits">
     <div class="sec-head">
       <h1>{T('Privacy')}</h1>
-      <p class="lede">{T('This website has no tracking, no analytics, no cookies and no advertising. This page explains what data is still processed when you visit it.')}</p>
+      <p class="lede">{T('This website uses Umami Cloud for visitor statistics, without cookies or advertising. This page explains what data is processed when you visit it.')}</p>
     </div>
     <section class="credit">
       <h2 class="h3">{T('Who Is Responsible')}</h2>
@@ -26,17 +26,21 @@ const T = (en: string) => t(lang, en);
       <p>{T("To show the latest release and the number of stars, your browser asks GitHub's API (api.github.com) directly, at most once an hour. GitHub receives your IP address with these requests.")}</p>
     </section>
     <section class="credit">
+      <h2 class="h3">{T('Website Analytics With Umami')}</h2>
+      <p set:html={T("We use Umami Cloud (Umami Software, Inc., USA) for visitor statistics. Your browser sends data such as pages visited, referrers, browser and device details and approximate location to Umami. It uses no cookies. IP addresses are processed for these statistics and may appear in operational logs, but are not stored in standard analytics records. Analytics are stored in the EU; some service operations may process data elsewhere. See <a href=\"https://umami.is/privacy\" target=\"_blank\" rel=\"noopener\">Umami's privacy policy</a>.")} />
+    </section>
+    <section class="credit">
       <h2 class="h3">{T('Stored in Your Browser')}</h2>
       <p>{T('If you switch the language, the website remembers your choice in your browser. Until you close the tab, it also keeps the latest release, the number of stars and whether the intro video has played. None of this is sent anywhere, and you can delete it in your browser settings.')}</p>
     </section>
     <section class="credit">
       <h2 class="h3">{T('Fonts and Other Files')}</h2>
-      <p>{T('Fonts, images, the video and scripts are served by this website itself, not loaded from other services.')}</p>
+      <p>{T("Fonts, images, the video and the website's own scripts are served by this website. The Umami analytics script is loaded from Umami Cloud, as described above.")}</p>
     </section>
     <section class="credit">
       <h2 class="h3">{T('Links to Other Websites')}</h2>
       <p>{T('Links to GitHub and other websites lead to services with their own privacy statements.')}</p>
     </section>
-    <p class="updated">{T('Last updated: 14 November 2026')}</p>
+    <p class="updated">{T('Last updated: 22 November 2026')}</p>
   </div>
 </Base>
