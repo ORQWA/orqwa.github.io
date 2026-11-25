@@ -1,5 +1,6 @@
 ---
 import { t, dateLocale, pageUrl, type Lang } from '../i18n';
+import SupportStrip from './SupportStrip.astro';
 import { getRelease } from '../lib/release';
 import { formatDate, mb, RELEASES_PAGE, type Slot } from '../lib/assets';
 import firstCourse from '../lib/first-course.json';
@@ -123,6 +124,8 @@ const firstRide = [
       <a class="ext" href="https://github.com/ORQWA/ORQWA/wiki/Getting-started" {...ext}>{T('Full install guide')}</a>
       <a href={pageUrl(lang, 'alternatives')}>{T('Compare with other apps')}</a>
     </div>
+
+    <SupportStrip lang={lang} />
   </div>
 </section>
 
