@@ -50,9 +50,9 @@ export const REPO_API = 'https://api.github.com/repos/ORQWA/ORQWA';
 export const formatStars = (n: number) =>
   n < 1000 ? String(n) : `${(n / 1000).toFixed(n < 10000 ? 1 : 0).replace(/\.0$/, '')}k`;
 
-/** The free sample world, on its own release (never the latest one, which the app downloads
- *  come from). The tag and file name stay the same for every version; see orqwa-worlds' README. */
+/** The free sample world, a file on this website repository's releases. The tag and file name
+ *  stay the same for every version; see "The sample world" in the README. */
 export const SAMPLE_WORLD = {
-  url: 'https://github.com/ORQWA/ORQWA/releases/download/sample-world/twann-chasseral.oqx',
+  url: 'https://github.com/ORQWA/orqwa.github.io/releases/download/sample-world/twann-chasseral.oqx',
   size: 873039129,
 } as const;
