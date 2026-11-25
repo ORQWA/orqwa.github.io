@@ -32,6 +32,57 @@ come from its `docs/images`, through the `orqwa-docs` link.
 - **Rebuilds.** On every push and daily. A new release does not trigger a rebuild: the
   browser check above already shows it, and the daily build picks it up.
 
+## The sample world
+
+The download page offers the free sample world, Twann – Chasseral, as a file on this
+repository's GitHub releases. The world is built in ORQWA/orqwa-worlds; the page links to a
+fixed address (`SAMPLE_WORLD` in `src/lib/assets.ts`), so the tag and file name stay the same
+for every version:
+`https://github.com/ORQWA/orqwa.github.io/releases/download/sample-world/twann-chasseral.oqx`.
+
+1. Seal the world with the maintainers' world key, never the development key (orqwa-worlds'
+   README and its `docs/signing-worlds.md`).
+2. Check it with a released `orqwa-cli`. It must name the world key as signer; a released ORQWA
+   refuses a file sealed with the development key:
+
+   ```sh
+   "$ORQWA_CLI" world-check twann-chasseral.oqx
+   ```
+
+3. The first time, create the release with the file and the notes below (`release-notes.md`):
+
+   ```sh
+   gh release create sample-world -R ORQWA/orqwa.github.io \
+     --title "Sample world: Twann – Chasseral" --notes-file release-notes.md \
+     twann-chasseral.oqx
+   ```
+
+4. For a new version, replace the file and update the notes. The link stays the same; while
+   the file uploads, it is briefly missing.
+
+   ```sh
+   gh release upload sample-world -R ORQWA/orqwa.github.io --clobber twann-chasseral.oqx
+   gh release edit sample-world -R ORQWA/orqwa.github.io --notes-file release-notes.md
+   ```
+
+5. If the file's size changed, update `size` in `SAMPLE_WORLD`: the page shows it in MB.
+
+The notes carry the world's credits. Canton Bern's terms bind whoever receives its data, so
+they also say that the geodata stays under its providers' terms:
+
+```markdown
+Twann – Chasseral, version 0.1: the road from Twann on Lake Biel up to the Chasseral,
+20.4 km and 1,190 m of climbing, as a detailed 3D world for ORQWA. Free to download and ride.
+
+Credits
+- Geodata © swisstopo (modified)
+- Amtliche Vermessung © Amt für Geoinformation des Kantons Bern
+- Bundesamt für Statistik; Eidg. Gebäude- und Wohnungsregister
+- Surface detail: ambientCG (CC0)
+
+The geodata in this world remains under its providers' terms of use.
+```
+
 ## Translations
 
 German text lives in `src/i18n/de.json` (plus `de-attr.json` and `de-extra.json`), keyed by the

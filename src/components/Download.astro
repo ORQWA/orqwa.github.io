@@ -1,7 +1,8 @@
 ---
-import { t, dateLocale, pageUrl, type Lang } from '../i18n';
+import { t, dateLocale, pageUrl, asset, type Lang } from '../i18n';
+import SupportStrip from './SupportStrip.astro';
 import { getRelease } from '../lib/release';
-import { formatDate, mb, RELEASES_PAGE, type Slot } from '../lib/assets';
+import { formatDate, mb, RELEASES_PAGE, SAMPLE_WORLD, type Slot } from '../lib/assets';
 import firstCourse from '../lib/first-course.json';
 
 interface Props { lang: Lang }
@@ -61,6 +62,13 @@ const platforms = [
     note: "For Android 10 or newer. Uninstalling deletes ORQWA's data on the device, so export rides you want to keep first.",
   },
 ] as const;
+
+const km = (firstCourse.length_m / 1000).toLocaleString(dateLocale(lang), { maximumFractionDigits: 1 });
+const importSteps = [
+  'In ORQWA, open <b>Courses</b> and press <b>Import</b>.',
+  'Choose the downloaded file.',
+  'Open <b>Twann – Chasseral</b> and press <b>Ride</b>.',
+];
 
 const firstRide = [
   ['Wake Your Trainer', 'Turn on Bluetooth and wake your trainer by pedalling.'],
@@ -123,6 +131,8 @@ const firstRide = [
       <a class="ext" href="https://github.com/ORQWA/ORQWA/wiki/Getting-started" {...ext}>{T('Full install guide')}</a>
       <a href={pageUrl(lang, 'alternatives')}>{T('Compare with other apps')}</a>
     </div>
+
+    <SupportStrip lang={lang} />
   </div>
 </section>
 
@@ -140,10 +150,37 @@ const firstRide = [
       <div class="ride-text">
         <ol class="ride-steps" id="ride-steps">
           {firstRide.map(([title, text]) => (
-            <li><h3 class="h3">{T(title)}</h3><p set:html={T(text)} /></li>
+            <li><h3 class="h3">{T(title)}</h3><p set:html={T(text)} />
+              {title === 'Pick a Course' && <a class="ride-more" href="#sample-world">{T('Ride it as a detailed 3D world')}</a>}</li>
           ))}
         </ol>
         <p class="stuck">{T('Stuck?')} <a class="ext" href="https://github.com/ORQWA/ORQWA/wiki/Getting-started" {...ext}>{T('See the full guide')}</a>.</p>
+      </div>
+    </div>
+
+    <div class="sample-world" id="sample-world">
+      <div class="sec-head">
+        <h3 class="sample-world-title">{T('Ride It in Full Detail')}</h3>
+        <p>{T('The course from your first ride is also available as a detailed 3D world, with the vineyards, the Jura forest and the tower on the summit. Free to download and ride offline.')}</p>
+      </div>
+      <div class="panel">
+        <div class="card">
+          <img class="world-shot" src={asset('media/sample-world.webp')} alt={T('Riding past the Chasseral transmitter tower in the sample world')} width="1000" height="611" loading="lazy" decoding="async">
+          <div class="hud">
+            <span class="label">{T('Length')}</span><span class="label">{T('Summit')}</span><span class="label">{T('Size')}</span>
+            <span class="v">{km}<small>km</small></span>
+            <span class="v">{firstCourse.summit_m}<small>m</small></span>
+            <span class="v">{mb(SAMPLE_WORLD.size)}<small>MB</small></span>
+          </div>
+          <a class="btn btn-primary" href={SAMPLE_WORLD.url}>{T('Download the sample world')}</a>
+        </div>
+        <div class="card">
+          <h4 class="h3">{T('Import')}</h4>
+          <ol class="install">
+            {importSteps.map((s) => <li><span set:html={T(s)} /></li>)}
+          </ol>
+          <p class="note" set:html={T('This is a free demo. More are on the way, and <a href="/support">buying them supports ORQWA</a>.').replace('/support', pageUrl(lang, 'support'))} />
+        </div>
       </div>
     </div>
   </div>

@@ -4,6 +4,7 @@ import Hero from '../components/Hero.astro';
 import Features from '../components/Features.astro';
 import Devices from '../components/Devices.astro';
 import Screens from '../components/Screens.astro';
+import SupportStrip from '../components/SupportStrip.astro';
 import { t, pageUrl, asset, type Lang } from '../i18n';
 import { getRelease } from '../lib/release';
 
@@ -74,6 +75,7 @@ const app = {
           <span class="next-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg></span>
         </a>
       </div>
+      <SupportStrip lang={lang} />
     </div>
   </section>
 </Base>

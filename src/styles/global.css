@@ -12,6 +12,7 @@
   --accent-hi: #2EB0FF;
   --ok: #5CD18F;
   --danger: #ED545C;
+  --heart: #FF6B8A; /* the Support links */
   --on-accent: #04111F;
   --f-sans: "Instrument Sans Variable", "Instrument Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --f-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
@@ -98,7 +99,7 @@ code, .mono { font-family: var(--f-mono); font-size: .86em; }
 .bar .btn { padding: 0 16px; font-size: 15px; }
 .nav a.star { padding: 0 12px; gap: 7px; font-size: 14px; border: 1px solid var(--line); }
 .nav a.star:hover { border-color: rgba(150, 190, 240, .32); }
-.star svg { width: 14px; height: 14px; fill: currentColor; }
+.star svg { width: 16px; height: 16px; fill: currentColor; }
 .star-count { padding-left: 8px; border-left: 1px solid var(--line); color: var(--text); font-variant-numeric: tabular-nums; }
 .lang {
   display: inline-grid; place-items: center; text-decoration: none;
@@ -106,7 +107,7 @@ code, .mono { font-family: var(--f-mono); font-size: .86em; }
   background: none; border: 1px solid var(--line); min-width: 44px; padding: 0 10px;
 }
 .lang:hover { color: var(--text); border-color: rgba(150, 190, 240, .32); }
-/* The full bar needs about 1010px in German: first the GitHub label goes, then the page links. */
+/* The full bar needs about 1080px in German: first the Support label goes (its heart stays), then the page links. */
 @media (max-width: 1100px) {
   .nav .hide-m { display: none; }
   .nav { gap: 18px; }
@@ -152,8 +153,6 @@ html.menu-open { overflow: hidden; }
 @keyframes menu-in { from { opacity: 0; transform: translateY(-6px); } }
 @media (max-width: 760px) {
   .brand { --mark: 26px; }
-  .star-label { display: none; }
-  .star-count { padding-left: 0; border-left: 0; }
   .bar-in { gap: 16px; }
   .nav { gap: 16px; }
 }
@@ -556,11 +555,15 @@ td { color: var(--muted); }
 
 /* Footer */
 footer { border-top: 1px solid var(--line); padding-block: 48px 56px; color: var(--muted); font-size: 14px; }
-.foot { display: flex; flex-wrap: wrap; justify-content: center; gap: 28px clamp(48px, 10vw, 140px); }
+/* Three columns with the middle one on the page's centre line, above the centred notes below. */
+.foot { display: grid; grid-template-columns: 1fr auto 1fr; gap: 28px clamp(48px, 10vw, 140px); }
+.foot nav:first-child { justify-self: end; }
+.foot nav:last-child { justify-self: start; }
 .foot nav { display: grid; gap: 8px; align-content: start; }
 .foot nav a { color: var(--muted); text-decoration: none; }
 .foot nav a:hover { color: var(--text); }
 .independent { max-width: 88ch; margin: 40px auto 0; text-align: center; font-size: 13px; }
+.independent + .independent { margin-top: 12px; }
 .copyright { margin: 12px 0 0; text-align: center; font-size: 13px; }
 .copyright a { color: inherit; }
 .copyright a:hover { color: var(--text); }
@@ -575,7 +578,7 @@ footer { border-top: 1px solid var(--line); padding-block: 48px 56px; color: var
   *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
 }
 
-/* Home: the two next steps, in the hairline style of the features. */
+/* Home: the three next steps, in the hairline style of the features. */
 .next-steps { padding-block: calc(var(--section-gap) - 5px) var(--section-gap); } /* the reels end with ~5px below their last caption */
 .next {
   display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px;
@@ -692,6 +695,9 @@ footer { border-top: 1px solid var(--line); padding-block: 48px 56px; color: var
 .ride-steps .h3 { min-height: 32px; display: flex; align-items: center; transition: color .35s ease; }
 .ride-steps p { color: var(--muted); font-size: 15.5px; }
 /* After the steps, help for whoever gets stuck. */
+/* Step 4's small pointer to the sample world at the bottom of the section. */
+.ride-steps .ride-more { justify-self: start; font-size: 14px; font-weight: 500; text-decoration: none; }
+.ride-steps .ride-more:hover { text-decoration: underline; }
 .ride .stuck { color: var(--muted); font-size: 15.5px; }
 .ride .stuck a { font-weight: 500; text-decoration: none; }
 .ride .stuck a:hover { text-decoration: underline; }
@@ -716,6 +722,15 @@ footer { border-top: 1px solid var(--line); padding-block: 48px 56px; color: var
   .ride-steps .h3 { font-size: 1.1rem; }
   .ride-steps p, .ride .stuck { font-size: 15px; }
 }
+
+/* After the first ride: the sample world to download, laid out like the download box above. */
+.sample-world { margin-top: var(--section-gap); }
+.sample-world .sec-head { gap: 10px; margin-bottom: 28px; }
+.sample-world .sec-head p { color: var(--muted); max-width: 60ch; }
+.sample-world .note { min-height: 0; }
+.sample-world .note a { font-weight: 500; text-decoration: none; }
+.sample-world .note a:hover { text-decoration: underline; }
+.sample-world-title { font-size: clamp(1.5rem, 2.6vw, 1.9rem); font-stretch: 88%; letter-spacing: -.015em; line-height: 1.2; }
 
 /* Timeline pills coloured like the diagram lines: blue online, green on your device, purple sync. */
 .timeline li.c-on::before { color: var(--accent-hi); border-color: rgba(46, 176, 255, .5); }
@@ -769,7 +784,7 @@ footer { border-top: 1px solid var(--line); padding-block: 48px 56px; color: var
   .fg h3 { text-align: left; }
   /* The footer too: its two link lists wrap into one column, so centring them by their own
      widths put each on a different edge. The links get full-height rows as thumb targets. */
-  .foot { flex-direction: column; justify-content: flex-start; gap: 20px; }
+  .foot { display: flex; flex-direction: column; justify-content: flex-start; gap: 20px; }
   .foot nav { gap: 0; }
   .foot nav a { display: flex; align-items: center; min-height: 44px; }
   .independent, .copyright { text-align: left; }
@@ -831,3 +846,92 @@ footer { border-top: 1px solid var(--line); padding-block: 48px 56px; color: var
   .cmp-table td[data-app]::before { content: attr(data-app); color: var(--muted); font-weight: 400; }
   .cmp-table td[data-app] { text-align: right; }
 }
+
+/* Support page: three ways to give, GitHub Sponsors first, then sponsors, free ways to help and costs. */
+.support { padding-top: calc(var(--bar) + clamp(40px, 6vw, 80px)); display: grid; gap: clamp(64px, 8vw, 96px); }
+.support .sec-head { margin-bottom: 0; }
+.ways { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+/* Same size cards; the last part (button or sample) sits at the bottom so they line up. */
+.way { display: flex; flex-direction: column; gap: 12px; padding: 28px; border-radius: var(--r); background: var(--panel); border: 1px solid var(--line); }
+.way-main { background: linear-gradient(160deg, rgba(46, 176, 255, .14), rgba(46, 176, 255, .03) 60%); border-color: rgba(46, 176, 255, .35); }
+.way p { color: var(--muted); font-size: 15.5px; }
+.way .way-small { font-size: 15px; }
+.way-title { font-size: 1.5rem; font-stretch: 88%; letter-spacing: -.015em; line-height: 1.2; }
+.way-top { display: flex; justify-content: space-between; align-items: center; min-height: 28px; }
+.way-top svg { width: 26px; height: 26px; fill: var(--accent-hi); }
+.way-top svg.line { fill: none; stroke: var(--accent-hi); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.way-tag { font-size: 14px; font-weight: 600; padding: 3px 10px; border-radius: 999px; background: rgba(46, 176, 255, .16); color: var(--accent-hi); }
+.way-tag.soon { background: rgba(154, 167, 186, .14); color: var(--muted); }
+.way .btn { align-self: stretch; justify-content: center; } /* full width, so every card ends on the same full-width row */
+.way > :last-child { margin-top: auto; }
+/* Side by side, the cards share their rows (icon, title, text, middle, button), so the tiers, the
+   QR code and the sample world's picture sit at the same height, centred in the same row. Only
+   where the QR code shows: without it the coffee card has a row fewer. */
+@media (min-width: 1000.02px) and (hover: hover) {
+  .way { display: grid; grid-row: span 5; grid-template-rows: subgrid; row-gap: 12px; }
+  .way > :is(.way-mid, .coffee-qr, .world-sample) { margin: 0; align-self: center; }
+}
+.way-mid { display: grid; gap: 14px; }
+.btn svg.heart { fill: currentColor; }
+/* GitHub Sponsors before it is approved: the button is shown but leads nowhere. */
+.btn[aria-disabled="true"], .btn[aria-disabled="true"]:hover { opacity: .45; cursor: not-allowed; transform: none; }
+.btn-primary[aria-disabled="true"]:hover { background: var(--accent-hi); }
+.btn-coffee svg { fill: none; stroke: #FFDD00; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+/* Desktop only: on a phone the button is the quicker way. White behind it, so cameras can read it. */
+.coffee-qr { margin: auto 0; display: grid; justify-items: center; gap: 8px; align-self: center; }
+/* The QR image (only the dots, on transparent) is used as a mask, so they take the site's colours:
+   navy on the soft white. The middle, where Buy Me a Coffee had its logo, gets the ORQWA mark on a navy badge. */
+.qr { position: relative; display: block; width: 180px; height: 180px; padding: 12px; border-radius: 12px; background: var(--text); }
+.qr-code { display: block; width: 100%; height: 100%; background: var(--deep); -webkit-mask: var(--qr) center / contain no-repeat; mask: var(--qr) center / contain no-repeat; }
+.qr-logo { position: absolute; left: 50%; top: 50%; translate: -50% -50%; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 9px; background: var(--deep); }
+.qr-logo img { width: 24px; height: auto; }
+.coffee-qr figcaption { font-size: 14px; color: var(--muted); }
+@media (min-width: 1000.02px) and (hover: hover) { .coffee-qr + .btn { margin-top: 8px; } }
+@media (max-width: 1000px), (hover: none) { .coffee-qr { display: none; } }
+.tiers { margin: 0; display: grid; border-top: 1px solid var(--line); }
+.tiers div { display: grid; grid-template-columns: 8em 1fr; gap: 12px; padding-block: 9px; border-bottom: 1px solid var(--line); font-size: 15.5px; }
+.tiers dt { font-weight: 600; font-variant-numeric: tabular-nums; }
+.tiers dd { margin: 0; color: var(--muted); }
+
+/* The Worlds card: a picture of the sample world in the middle, like the QR code beside it. */
+.world-sample { margin: auto 0; display: grid; gap: 8px; }
+.world-sample figcaption { font-size: 14px; color: var(--muted); text-align: center; font-variant-numeric: tabular-nums; }
+.world-shot { width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--line); }
+.btn-world svg { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+.sup-block { display: grid; gap: 20px; padding-block: 0; } /* the page grid spaces them, not the global section padding */
+.sup-block > h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); text-align: center; }
+.sponsors { justify-items: center; text-align: center; gap: 12px; }
+.sponsors > p { color: var(--muted); }
+.sponsor-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; margin-top: 8px; }
+.sponsor { display: grid; place-items: center; gap: 2px; min-height: 96px; width: min(280px, 100%); padding: 16px; border-radius: 12px; border: 1px solid var(--line); background: var(--panel); color: var(--text); font-weight: 600; text-decoration: none; }
+a.sponsor:hover { color: var(--text); border-color: rgba(150, 190, 240, .32); }
+.sponsor-open { border: 1.5px dashed var(--line); background: none; color: var(--muted); font-weight: 400; font-size: 15.5px; }
+a.sponsor-open:hover { color: var(--text); }
+.sponsor-open span { font-size: 14px; color: var(--accent-hi); }
+.money dl { margin: 0; width: 100%; max-width: 820px; margin-inline: auto; }
+.money dl div { display: grid; grid-template-columns: 11em 1fr; gap: 24px; align-items: baseline; padding-block: 16px; border-top: 1px solid var(--line); }
+.money dl div:last-child { border-bottom: 1px solid var(--line); }
+.money dt { font-weight: 600; }
+.money dd { margin: 0; color: var(--muted); }
+/* Three boxes: one row, or one column, never two columns with an empty cell. */
+@media (max-width: 960px) { .features.help { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 760px) { .features.help { grid-template-columns: 1fr; } }
+@media (max-width: 1000px) { .ways { grid-template-columns: 1fr; max-width: 620px; margin-inline: auto; width: 100%; } }
+@media (max-width: 600px) {
+  .sup-block > h2 { text-align: left; }
+  .sponsors { justify-items: start; text-align: left; }
+  .sponsor-list { justify-content: flex-start; }
+  .money dl div { grid-template-columns: 1fr; gap: 4px; }
+}
+@media (max-width: 420px) { .tiers div { grid-template-columns: 1fr; gap: 0; } }
+
+/* The ways to support ORQWA from other pages: the heart in the bar and menu, the strip on the home and download pages. */
+.nav a.support-link svg, .menu-nav a.support-link svg { fill: var(--heart); }
+.menu-nav a.support-link svg { width: 18px; height: 18px; }
+.give { display: grid; grid-template-columns: auto 1fr auto; gap: 18px; align-items: center; margin-top: 40px; padding: 20px 22px; border-radius: var(--r); border: 1px solid var(--line); background: linear-gradient(100deg, rgba(255, 107, 138, .10), rgba(46, 176, 255, .06)); }
+.give-badge { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: rgba(255, 107, 138, .14); }
+.give-badge svg { width: 20px; height: 20px; fill: var(--heart); }
+.give-text { display: grid; gap: 2px; }
+.give-text p { color: var(--muted); font-size: 15px; }
+@media (max-width: 700px) { .give { grid-template-columns: auto 1fr; } .give .btn { grid-column: 1 / -1; justify-self: start; } }

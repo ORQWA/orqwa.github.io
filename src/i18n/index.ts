@@ -3,7 +3,7 @@ import deAttr from './de-attr.json';
 import deExtra from './de-extra.json';
 
 export type Lang = 'en' | 'de';
-export type Page = 'home' | 'how' | 'download' | 'alternatives' | 'credits' | 'privacy';
+export type Page = 'home' | 'how' | 'download' | 'support' | 'alternatives' | 'credits' | 'privacy';
 
 const DE: Record<string, string> = { ...de, ...deAttr, ...deExtra };
 const norm = (s: string) => s.replace(/\s+/g, ' ').trim();
@@ -23,7 +23,7 @@ export function t(lang: Lang, en: string): string {
 }
 
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
-const slugs: Record<Page, string> = { home: '', how: 'under-the-hood/', download: 'download/', alternatives: 'alternatives/', credits: 'credits/', privacy: 'privacy/' };
+const slugs: Record<Page, string> = { home: '', how: 'under-the-hood/', download: 'download/', support: 'support/', alternatives: 'alternatives/', credits: 'credits/', privacy: 'privacy/' };
 
 /** The URL of a page in a language, e.g. /de/download/. */
 export const pageUrl = (lang: Lang, page: Page, hash = '') =>

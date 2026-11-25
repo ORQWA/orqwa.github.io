@@ -1,0 +1,139 @@
+---
+import Base from '../layouts/Base.astro';
+import { t, pageUrl, asset, type Lang } from '../i18n';
+import { SPONSORS_URL, SPONSORS_OPEN, COFFEE_URL, TIERS, WEBSITE_TIER } from '../lib/support';
+import sponsorList from '../lib/sponsors.json';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const T = (en: string) => t(lang, en);
+const ext = { target: '_blank', rel: 'noopener' };
+const dollars = (n: number) => T('$5 a month').replace('5', String(n));
+
+/** Sponsors from the website tier, added by hand when they want to be listed. */
+const sponsors = sponsorList as { name: string; url?: string }[];
+
+---
+<Base lang={lang} page="support" title={T('Support · ORQWA')}
+  description={T('Ways to support ORQWA, the free indoor cycling app: GitHub Sponsors, Buy Me a Coffee and, soon, worlds.')}>
+  <div class="wrap support page-end">
+    <div class="sec-head">
+      <h1>{T('Support ORQWA')}</h1>
+      <p class="lede">{T('ORQWA is free and open source, built in spare time. There is no subscription, no account and no ads. If it has become part of your training, here is how you can help it grow.')} <a href="#money">{T('See where the money goes')}</a></p>
+    </div>
+
+    <div class="ways">
+      <article class="way way-main">
+        <div class="way-top">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          {!SPONSORS_OPEN && <span class="way-tag soon">{T('Coming soon')}</span>}
+        </div>
+        <h2 class="way-title">GitHub Sponsors</h2>
+        <p>{T('A monthly amount you choose. Steady support helps plan new features.')}</p>
+        <div class="way-mid">
+          <dl class="tiers">
+            {TIERS.map((tier) => <div><dt>{dollars(tier.amount)}</dt><dd>{T(tier.reward)}</dd></div>)}
+          </dl>
+          <p class="way-small">{T('Or give a one-time amount. Change or cancel any time.')}</p>
+        </div>
+        {SPONSORS_OPEN
+          ? <a class="btn btn-primary" href={SPONSORS_URL} {...ext}>
+              <svg class="heart" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.3C1 8.4 3 4.5 6.8 4.5c2.1 0 3.6 1.2 5.2 3 1.6-1.8 3.1-3 5.2-3 3.8 0 5.8 3.9 4.4 7.2C19.5 16.4 12 21 12 21z"/></svg>
+              {T('Sponsor on GitHub')}
+            </a>
+          : <span class="btn btn-primary" aria-disabled="true">
+              <svg class="heart" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.3C1 8.4 3 4.5 6.8 4.5c2.1 0 3.6 1.2 5.2 3 1.6-1.8 3.1-3 5.2-3 3.8 0 5.8 3.9 4.4 7.2C19.5 16.4 12 21 12 21z"/></svg>
+              {T('Sponsor on GitHub')}
+            </span>}
+      </article>
+
+      <article class="way">
+        <div class="way-top">
+          <svg class="line" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h13v5a6 6 0 0 1-6 6h-1a6 6 0 0 1-6-6zM17 9h1.5a2.5 2.5 0 0 1 0 5H17M8 2.5v2.5M12 2.5v2.5"/></svg>
+        </div>
+        <h2 class="way-title">Buy Me a Coffee</h2>
+        <p>{T('A quick thank-you after a good ride. Pay by card, no account needed.')}</p>
+        <figure class="coffee-qr">
+          <span class="qr" role="img" aria-label={T('QR code for Buy Me a Coffee')} style={`--qr: url(${asset('media/coffee-qr.png')})`}>
+            <span class="qr-code"></span>
+            <span class="qr-logo"><img src={asset('favicon.svg')} alt="" width="24" height="22"></span>
+          </span>
+          <figcaption>{T('Scan with your phone')}</figcaption>
+        </figure>
+        <a class="btn btn-coffee" href={COFFEE_URL} {...ext}>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h13v5a6 6 0 0 1-6 6h-1a6 6 0 0 1-6-6zM17 9h1.5a2.5 2.5 0 0 1 0 5H17M8 2.5v2.5M12 2.5v2.5"/></svg>
+          {T('Buy me a coffee')}
+        </a>
+      </article>
+
+      <article class="way">
+        <div class="way-top">
+          <svg class="line" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18l5-7 4 4 3-5 6 8z"/><circle cx="17" cy="6" r="2"/></svg>
+          <span class="way-tag soon">{T('Coming soon')}</span>
+        </div>
+        <h2 class="way-title">{T('Worlds')}</h2>
+        <p>{T('Detailed 3D routes and videos to buy. They help keep the app free.')}</p>
+        <figure class="world-sample">
+          <img class="world-shot" src={asset('media/sample-world.webp')} alt={T('Riding past the Chasseral transmitter tower in the sample world')} width="1000" height="611" loading="lazy" decoding="async">
+          <figcaption>{T('Free demo world: Twann – Chasseral')}</figcaption>
+        </figure>
+        <a class="btn btn-world" href={pageUrl(lang, 'download', '#sample-world')}>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10.5l5 5 5-5M5 19.5h14"/></svg>
+          {T('Get the sample world')}
+        </a>
+      </article>
+    </div>
+
+    <section class="sup-block sponsors" aria-labelledby="sponsors-h">
+      <h2 id="sponsors-h">{T('Sponsors')}</h2>
+      <p>{T('Thank you to everyone who keeps ORQWA going.')}</p>
+      <div class="sponsor-list">
+        {sponsors.map((s) => s.url
+          ? <a class="sponsor" href={s.url} {...ext}>{s.name}</a>
+          : <span class="sponsor">{s.name}</span>)}
+        {SPONSORS_OPEN
+          ? <a class="sponsor sponsor-open" href={SPONSORS_URL} {...ext}>
+              {T('Your name or logo here')}
+              <span>{T('from $100 a month').replace('100', String(WEBSITE_TIER))}</span>
+            </a>
+          : <span class="sponsor sponsor-open">
+              {T('Your name or logo here')}
+              <span>{T('from $100 a month').replace('100', String(WEBSITE_TIER))}</span>
+            </span>}
+      </div>
+    </section>
+
+    <section class="sup-block" aria-labelledby="free-h">
+      <h2 id="free-h">{T('Free Ways to Help')}</h2>
+      <div class="features help">
+        <div class="feat">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg>
+          <h3 class="h3">{T('Star on GitHub')}</h3>
+          <p>{T('More stars help other riders find ORQWA.')}</p>
+          <a class="ext" href="https://github.com/ORQWA/ORQWA" {...ext}>{T('ORQWA on GitHub')}</a>
+        </div>
+        <div class="feat">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8v5M12 16.5v.01M10.3 3.9 2.4 18a2 2 0 0 0 1.7 3h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+          <h3 class="h3">{T('Report a Bug')}</h3>
+          <p>{T('Say what broke and which trainer you use.')}</p>
+          <a class="ext" href="https://github.com/ORQWA/ORQWA/issues" {...ext}>{T('Open an issue')}</a>
+        </div>
+        <div class="feat">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H8l-4 4z"/></svg>
+          <h3 class="h3">{T('Tell Your Friends')}</h3>
+          <p>{T('Invite friends to a group ride or tell your club about ORQWA.')}</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="sup-block money" id="money" aria-labelledby="money-h">
+      <h2 id="money-h">{T('Where the Money Goes')}</h2>
+      <dl>
+        <div><dt>{T('Signing and Stores')}</dt><dd set:html={T("Certificates and developer accounts, so Windows and macOS stop warning when you install ORQWA, and it can reach the app stores. The <a href=\"https://developer.apple.com/programs/\" target=\"_blank\" rel=\"noopener\">Apple Developer Program</a> alone costs $99 a year.")} /></div>
+        <div><dt>{T('New Worlds')}</dt><dd>{T('Recording real rides and building detailed routes, so there is always something new to ride.')}</dd></div>
+        <div><dt>{T('Time and Tokens')}</dt><dd>{T('Evenings and weekends on new features and fixes, and the coding tools that help.')}</dd></div>
+        <div><dt>{T('Fuel')}</dt><dd>{T('Coffee, mostly. Some features need more than one cup.')}</dd></div>
+      </dl>
+    </section>
+  </div>
+</Base>

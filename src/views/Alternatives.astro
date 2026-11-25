@@ -66,7 +66,7 @@ const ld = {
   <div class="wrap cmp page-end">
     <div class="sec-head">
       <h1 set:html={T('A <em>Free Alternative</em> to Zwift, Rouvy, MyWhoosh and TrainerRoad')} />
-      <p class="lede">{T('ORQWA is a free, open-source indoor cycling app for your smart trainer. There is no subscription and no account, and your rides are saved on your device. Here is what it does well compared with the big apps, and what it doesn\'t do.')}{' '}<a href={pageUrl(lang, 'home', '#devices')}>{T('Check that your trainer works')}</a></p>
+      <p class="lede">{T('ORQWA is a free, open-source indoor cycling app for your smart trainer. There is no subscription and no account, and your rides are saved on your device. Here is what it does well compared with the big apps, and what it doesn\'t do.')}</p>
       <nav class="cmp-jump" aria-label={T('Apps on this page')}>
         {apps.map((a) => <a href={`#${a.id}`}>{a.name}</a>)}
       </nav>
