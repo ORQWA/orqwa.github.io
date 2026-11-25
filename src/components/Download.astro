@@ -1,5 +1,5 @@
 ---
-import { t, dateLocale, type Lang } from '../i18n';
+import { t, dateLocale, pageUrl, type Lang } from '../i18n';
 import { getRelease } from '../lib/release';
 import { formatDate, mb, RELEASES_PAGE, type Slot } from '../lib/assets';
 import firstCourse from '../lib/first-course.json';
@@ -121,6 +121,7 @@ const firstRide = [
       <a class="ext" href="https://github.com/ORQWA/ORQWA/releases" {...ext}>{T('All releases')}</a>
       <a class="ext" href="https://github.com/ORQWA/ORQWA/actions/workflows/ci.yml?query=branch%3Amain" {...ext}>{T('Test versions')}</a>
       <a class="ext" href="https://github.com/ORQWA/ORQWA/wiki/Getting-started" {...ext}>{T('Full install guide')}</a>
+      <a href={pageUrl(lang, 'alternatives')}>{T('Compare with other apps')}</a>
     </div>
   </div>
 </section>
