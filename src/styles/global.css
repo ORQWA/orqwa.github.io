@@ -495,10 +495,10 @@ dialog.lightbox img { max-height: calc(92dvh - 56px); width: auto; }
 .techies a { text-decoration: none; }
 .techies a:hover { text-decoration: underline; }
 .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r); margin-top: 8px; }
-table { border-collapse: collapse; width: 100%; font-size: 15px; }
+table { border-collapse: collapse; width: 100%; }
 th, td { text-align: left; padding: 12px 16px; vertical-align: top; border-bottom: 1px solid var(--line); }
 tr:last-child td { border-bottom: 0; }
-th { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 500; background: var(--panel); }
+th { color: var(--text); font-weight: 600; background: var(--panel); }
 td:first-child { white-space: nowrap; }
 td .mono { color: var(--text); }
 td { color: var(--muted); }
@@ -774,4 +774,60 @@ footer { border-top: 1px solid var(--line); padding-block: 48px 56px; color: var
   .foot nav a { display: flex; align-items: center; min-height: 44px; }
   .independent, .copyright { text-align: left; }
   .independent { margin-top: 28px; }
+}
+
+/* Alternatives page (the cmp- prefix keeps clear of the download page's .alt): a glance table,
+   then one section per app with what you get and what you don't. */
+.cmp { padding-top: calc(var(--bar) + clamp(40px, 6vw, 80px)); display: grid; gap: clamp(56px, 7vw, 88px); }
+/* The grid's gap spaces the sections here: the padding every section gets elsewhere doubled it. */
+.cmp > section:not(.cmp-cta) { padding-block: 0; }
+.cmp .sec-head { margin-bottom: 0; }
+.cmp .sec-head h1 em { font-style: normal; color: var(--accent-hi); }
+.cmp-jump { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 4px; }
+.cmp-jump a { padding: 6px 14px; border: 1px solid var(--line); border-radius: 999px; color: var(--text); text-decoration: none; }
+.cmp-jump a:hover { border-color: rgba(46, 176, 255, .45); }
+.cmp-block { display: grid; gap: 20px; }
+.cmp-block > h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); text-align: center; }
+.cmp-table table { min-width: 640px; }
+.cmp-table th[scope="row"] { color: var(--text); font-size: inherit; font-weight: 400; letter-spacing: 0; text-transform: none; background: none; white-space: nowrap; }
+.cmp-table thead td { background: var(--panel); }
+.cmp-table tr:last-child th { border-bottom: 0; }
+.cmp-table td.us { color: var(--accent-hi); font-weight: 600; }
+.cmp-note { color: var(--muted); font-size: 14px; text-align: center; }
+.cmp-app { scroll-margin-top: calc(var(--bar) + 24px); }
+.cmp-intro { color: var(--muted); max-width: 65ch; margin-inline: auto; text-align: center; }
+.cmp-shot { display: block; width: 100%; height: auto; border-radius: var(--r); border: 1px solid var(--line); }
+.cmp-cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.cmp-col { display: grid; gap: 14px; align-content: start; padding: 24px 28px; border-radius: var(--r); border: 1px solid var(--line); }
+.cmp-get { background: var(--panel); }
+.cmp-col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.cmp-col li { display: grid; grid-template-columns: 20px 1fr; gap: 10px; color: var(--muted); }
+.cmp-col li svg { width: 20px; height: 20px; margin-top: 2px; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.cmp-get li svg { stroke: var(--ok); }
+.cmp-miss li svg { stroke: var(--muted); }
+.cmp-cta { display: grid; justify-items: center; gap: 20px; text-align: center; padding: clamp(40px, 6vw, 64px) clamp(20px, 4vw, 48px); border-radius: var(--r); border: 1px solid var(--line); background: linear-gradient(180deg, var(--deep), var(--ink)); }
+.cmp-cta p { color: var(--muted); font-size: 1.15rem; max-width: 52ch; }
+.cmp-cta .btn { margin-top: 8px; }
+@media (max-width: 760px) { .cmp-cols { grid-template-columns: 1fr; } }
+@media (max-width: 600px) {
+  .cmp-block > h2, .cmp-note { text-align: left; }
+  .cmp-intro { text-align: left; margin-inline: 0; }
+  .cmp-col { padding: 20px; }
+  .cmp-jump { justify-content: flex-start; }
+  .cmp-cta { justify-items: start; text-align: left; }
+  .cmp-cta p { font-size: 1.06rem; }
+}
+@media (max-width: 960px) {
+  /* Six columns don't fit a phone or tablet: each row becomes a block of its own, the apps listed under
+     the row's label, named from the cell's data-app since the header row is hidden. */
+  .cmp-table { overflow-x: visible; }
+  .cmp-table table { min-width: 0; }
+  .cmp-table thead { display: none; }
+  .cmp-table table, .cmp-table tbody, .cmp-table tr, .cmp-table td, .cmp-table th { display: block; }
+  .cmp-table tr { padding: 14px 16px; border-bottom: 1px solid var(--line); }
+  .cmp-table tr:last-child { border-bottom: 0; }
+  .cmp-table td { display: flex; justify-content: space-between; gap: 16px; padding: 4px 0; border-bottom: 0; }
+  .cmp-table th[scope="row"] { padding: 0 0 6px; font-weight: 600; white-space: normal; border-bottom: 0; }
+  .cmp-table td[data-app]::before { content: attr(data-app); color: var(--muted); font-weight: 400; }
+  .cmp-table td[data-app] { text-align: right; }
 }

@@ -1,0 +1,120 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import { t, pageUrl, type Lang } from '../i18n';
+import { ridingShots, appShots } from '../lib/shots';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const T = (en: string) => t(lang, en);
+/** A screenshot from the home page's reels, by its caption. */
+const shot = (caption: string) => [...ridingShots, ...appShots].find((s) => s.caption === caption)!;
+
+/** One section per app, so each name gets its own heading for people searching "<app> alternative".
+ *  Claims about the other apps stay general (free or subscription, account) so they don't go stale. */
+const apps = [
+  { id: 'zwift', shot: shot('Group ride up the Furka'), name: 'Zwift',
+    intro: 'Zwift is built around a shared online world with races and events. ORQWA leaves out the game layer. You ride real routes in 3D or follow ride videos, alone or with a few friends, and there\'s no ORQWA server or account behind it.',
+    get: ['Any GPX route in 3D, built from real maps and terrain', 'Group rides with up to eight people and voice chat', 'Virtual gears with Zwift Click, Shimano Di2, a keyboard or your phone', 'Workouts, ghosts and pacers, and uploads to Strava'],
+    miss: ['An open world with thousands of riders online', 'Races, public events and in-game rewards', 'Support for Zwift Play and Zwift Ride'] },
+  { id: 'rouvy', shot: shot('Video course'), name: 'Rouvy',
+    intro: 'Rouvy is known for filmed real-world routes. ORQWA plays ride videos at your speed too, and it can turn any route file you import into a 3D ride.',
+    get: ['Video rides that play at your speed', '3D rides on any route you import as GPX', 'Save your place and continue another day', 'Prepared courses work without an internet connection'],
+    miss: ['A large library of filmed routes, for now', 'Augmented-reality riders in the video'] },
+  { id: 'mywhoosh', shot: shot('Offline course library'), name: 'MyWhoosh',
+    intro: 'MyWhoosh is free as well. The difference is how it works: MyWhoosh needs an account and an internet connection, while ORQWA runs without either and its source code is open.',
+    get: ['No account, no sign-up, no email address', 'Your rides stay on your device', 'Open source under the GNU GPL v3', 'macOS, Windows, Linux and Android'],
+    miss: ['Large organised events and races', 'Built-in worlds designed for the game'] },
+  { id: 'trainerroad', shot: shot('Workout builder'), name: 'TrainerRoad',
+    intro: 'TrainerRoad is about structured workouts and training plans. ORQWA rides structured workouts in ERG mode too, but leaves the plan to you.',
+    get: ['Structured workouts in ERG mode, built in or made in the workout editor', 'Import .erg, .mrc, .zwo and .fit workouts', "Today's planned workouts from intervals.icu", 'Ramp, 20-minute and 2 × 8-minute FTP tests'],
+    miss: ['Training plans that adapt to your results', 'A coach that picks your next workout'] },
+];
+
+/** ORQWA first, then the apps in the order above. */
+const glance = [
+  { label: 'Price', values: ['Free', 'Subscription', 'Subscription', 'Free', 'Subscription'] },
+  { label: 'Account needed', values: ['No', 'Yes', 'Yes', 'Yes', 'Yes'] },
+  { label: 'Open source', values: ['Yes, GPL v3', 'No', 'No', 'No', 'No'] },
+  { label: 'Where your rides are kept', values: ['On your device', 'Their servers', 'Their servers', 'Their servers', 'Their servers'] },
+];
+
+const title = T('Free alternative to Zwift, Rouvy, MyWhoosh and TrainerRoad · ORQWA');
+const description = T('ORQWA is a free, open-source indoor cycling app with no subscription or account. How it compares with Zwift, Rouvy, MyWhoosh and TrainerRoad.');
+const url = new URL(pageUrl(lang, 'alternatives'), Astro.site).href;
+const home = new URL(pageUrl(lang, 'home'), Astro.site).href;
+// The page is about ORQWA (described in full on the home page) and sits one step below it.
+const ld = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebPage', url, name: title, description, inLanguage: lang,
+      about: { '@type': 'SoftwareApplication', name: 'ORQWA', url: home, applicationCategory: 'SportsApplication', offers: { '@type': 'Offer', price: '0', priceCurrency: 'CHF' } },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'ORQWA', item: home },
+        { '@type': 'ListItem', position: 2, name: T('Compare with other apps'), item: url },
+      ],
+    },
+  ],
+};
+---
+<Base lang={lang} page="alternatives" {title} {description}>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(ld)} />
+  <div class="wrap cmp page-end">
+    <div class="sec-head">
+      <h1 set:html={T('A <em>Free Alternative</em> to Zwift, Rouvy, MyWhoosh and TrainerRoad')} />
+      <p class="lede">{T('ORQWA is a free, open-source indoor cycling app for your smart trainer. There is no subscription and no account, and your rides are saved on your device. Here is what it does well compared with the big apps, and what it doesn\'t do.')}{' '}<a href={pageUrl(lang, 'home', '#devices')}>{T('Check that your trainer works')}</a></p>
+      <nav class="cmp-jump" aria-label={T('Apps on this page')}>
+        {apps.map((a) => <a href={`#${a.id}`}>{a.name}</a>)}
+      </nav>
+    </div>
+
+    <section class="cmp-block" aria-labelledby="glance-h">
+      <h2 id="glance-h">{T('At a Glance')}</h2>
+      <div class="table-wrap cmp-table">
+        <table>
+          <thead>
+            <tr><td></td><th scope="col">ORQWA</th>{apps.map((a) => <th scope="col">{a.name}</th>)}</tr>
+          </thead>
+          <tbody>
+            {glance.map((row) => (
+              <tr>
+                <th scope="row">{T(row.label)}</th>
+                {row.values.map((v, i) => <td class={i === 0 ? 'us' : undefined} data-app={i === 0 ? 'ORQWA' : apps[i - 1].name}>{T(v)}</td>)}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="cmp-note">{T('Based on each app\'s public website, November 2026.')}</p>
+    </section>
+
+    {apps.map((a) => (
+      <section class="cmp-block cmp-app" id={a.id} aria-labelledby={`${a.id}-h`}>
+        <h2 id={`${a.id}-h`}>{T('ORQWA as a {app} Alternative').replace('{app}', a.name)}</h2>
+        <p class="cmp-intro">{T(a.intro)}</p>
+        <Image class="cmp-shot" src={a.shot.src} alt={T(a.shot.alt)} widths={[640, 960, 1280]}
+          sizes="(max-width: 900px) 92vw, 860px" loading="lazy" />
+        <div class="cmp-cols">
+          <div class="cmp-col cmp-get">
+            <h3 class="h3">{T('What You Get')}</h3>
+            <ul>{a.get.map((g) => <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>{T(g)}</li>)}</ul>
+          </div>
+          <div class="cmp-col cmp-miss">
+            <h3 class="h3">{T('What You Don\'t Get')}</h3>
+            <ul>{a.miss.map((m) => <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12" /></svg>{T(m)}</li>)}</ul>
+          </div>
+        </div>
+      </section>
+    ))}
+
+    <section class="cmp-cta" aria-labelledby="cta-h">
+      <h2 id="cta-h">{T('Try It on Your Trainer')}</h2>
+      <p>{T('ORQWA runs on macOS, Windows, Linux and Android 10 or newer. Install it and ride the sample world in a few minutes.')}</p>
+      <a class="btn btn-primary" href={pageUrl(lang, 'download')}>{T('Download ORQWA')}</a>
+    </section>
+  </div>
+</Base>
