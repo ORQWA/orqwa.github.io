@@ -852,6 +852,9 @@ footer { border-top: 1px solid var(--line); padding-block: 48px 56px; color: var
 .way .btn { align-self: stretch; justify-content: center; } /* full width, so every card ends on the same full-width row */
 .way > :last-child { margin-top: auto; }
 .btn svg.heart { fill: currentColor; }
+/* GitHub Sponsors before it is approved: the button is shown but leads nowhere. */
+.btn[aria-disabled="true"], .btn[aria-disabled="true"]:hover { opacity: .45; cursor: not-allowed; transform: none; }
+.btn-primary[aria-disabled="true"]:hover { background: var(--accent-hi); }
 .btn-coffee svg { fill: none; stroke: #FFDD00; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 /* Desktop only: on a phone the button is the quicker way. White behind it, so cameras can read it. */
 .coffee-qr { margin: auto 0; display: grid; justify-items: center; gap: 8px; align-self: center; }
