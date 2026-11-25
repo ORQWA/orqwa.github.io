@@ -847,7 +847,7 @@ footer { border-top: 1px solid var(--line); padding-block: 48px 56px; color: var
   .cmp-table td[data-app] { text-align: right; }
 }
 
-/* Support page: three ways to give, GitHub Sponsors first, then sponsors, free ways to help and costs. */
+/* Support page: three ways to give, GitHub Sponsors first, then free ways to help and costs. */
 .support { padding-top: calc(var(--bar) + clamp(40px, 6vw, 80px)); display: grid; gap: clamp(64px, 8vw, 96px); }
 .support .sec-head { margin-bottom: 0; }
 .ways { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
@@ -855,7 +855,6 @@ footer { border-top: 1px solid var(--line); padding-block: 48px 56px; color: var
 .way { display: flex; flex-direction: column; gap: 12px; padding: 28px; border-radius: var(--r); background: var(--panel); border: 1px solid var(--line); }
 .way-main { background: linear-gradient(160deg, rgba(46, 176, 255, .14), rgba(46, 176, 255, .03) 60%); border-color: rgba(46, 176, 255, .35); }
 .way p { color: var(--muted); font-size: 15.5px; }
-.way .way-small { font-size: 15px; }
 .way-title { font-size: 1.5rem; font-stretch: 88%; letter-spacing: -.015em; line-height: 1.2; }
 .way-top { display: flex; justify-content: space-between; align-items: center; min-height: 28px; }
 .way-top svg { width: 26px; height: 26px; fill: var(--accent-hi); }
@@ -864,14 +863,15 @@ footer { border-top: 1px solid var(--line); padding-block: 48px 56px; color: var
 .way-tag.soon { background: rgba(154, 167, 186, .14); color: var(--muted); }
 .way .btn { align-self: stretch; justify-content: center; } /* full width, so every card ends on the same full-width row */
 .way > :last-child { margin-top: auto; }
-/* Side by side, the cards share their rows (icon, title, text, middle, button), so the tiers, the
-   QR code and the sample world's picture sit at the same height, centred in the same row. Only
-   where the QR code shows: without it the coffee card has a row fewer. */
+/* Side by side, the cards share their rows (icon, title, text, middle, button), so the QR code
+   and the sample world's picture sit at the same height, centred in the same row. Only
+   where the QR code shows: without it the coffee card has a row fewer. The GitHub card has no
+   middle, so its button goes to the last row. */
 @media (min-width: 1000.02px) and (hover: hover) {
+  .way-main > .btn { grid-row: 5; }
   .way { display: grid; grid-row: span 5; grid-template-rows: subgrid; row-gap: 12px; }
-  .way > :is(.way-mid, .coffee-qr, .world-sample) { margin: 0; align-self: center; }
+  .way > :is(.coffee-qr, .world-sample) { margin: 0; align-self: center; }
 }
-.way-mid { display: grid; gap: 14px; }
 .btn svg.heart { fill: currentColor; }
 /* GitHub Sponsors before it is approved: the button is shown but leads nowhere. */
 .btn[aria-disabled="true"], .btn[aria-disabled="true"]:hover { opacity: .45; cursor: not-allowed; transform: none; }
@@ -888,10 +888,6 @@ footer { border-top: 1px solid var(--line); padding-block: 48px 56px; color: var
 .coffee-qr figcaption { font-size: 14px; color: var(--muted); }
 @media (min-width: 1000.02px) and (hover: hover) { .coffee-qr + .btn { margin-top: 8px; } }
 @media (max-width: 1000px), (hover: none) { .coffee-qr { display: none; } }
-.tiers { margin: 0; display: grid; border-top: 1px solid var(--line); }
-.tiers div { display: grid; grid-template-columns: 8em 1fr; gap: 12px; padding-block: 9px; border-bottom: 1px solid var(--line); font-size: 15.5px; }
-.tiers dt { font-weight: 600; font-variant-numeric: tabular-nums; }
-.tiers dd { margin: 0; color: var(--muted); }
 
 /* The Worlds card: a picture of the sample world in the middle, like the QR code beside it. */
 .world-sample { margin: auto 0; display: grid; gap: 8px; }
@@ -901,14 +897,6 @@ footer { border-top: 1px solid var(--line); padding-block: 48px 56px; color: var
 
 .sup-block { display: grid; gap: 20px; padding-block: 0; } /* the page grid spaces them, not the global section padding */
 .sup-block > h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); text-align: center; }
-.sponsors { justify-items: center; text-align: center; gap: 12px; }
-.sponsors > p { color: var(--muted); }
-.sponsor-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; margin-top: 8px; }
-.sponsor { display: grid; place-items: center; gap: 2px; min-height: 96px; width: min(280px, 100%); padding: 16px; border-radius: 12px; border: 1px solid var(--line); background: var(--panel); color: var(--text); font-weight: 600; text-decoration: none; }
-a.sponsor:hover { color: var(--text); border-color: rgba(150, 190, 240, .32); }
-.sponsor-open { border: 1.5px dashed var(--line); background: none; color: var(--muted); font-weight: 400; font-size: 15.5px; }
-a.sponsor-open:hover { color: var(--text); }
-.sponsor-open span { font-size: 14px; color: var(--accent-hi); }
 .money dl { margin: 0; width: 100%; max-width: 820px; margin-inline: auto; }
 .money dl div { display: grid; grid-template-columns: 11em 1fr; gap: 24px; align-items: baseline; padding-block: 16px; border-top: 1px solid var(--line); }
 .money dl div:last-child { border-bottom: 1px solid var(--line); }
@@ -920,11 +908,8 @@ a.sponsor-open:hover { color: var(--text); }
 @media (max-width: 1000px) { .ways { grid-template-columns: 1fr; max-width: 620px; margin-inline: auto; width: 100%; } }
 @media (max-width: 600px) {
   .sup-block > h2 { text-align: left; }
-  .sponsors { justify-items: start; text-align: left; }
-  .sponsor-list { justify-content: flex-start; }
   .money dl div { grid-template-columns: 1fr; gap: 4px; }
 }
-@media (max-width: 420px) { .tiers div { grid-template-columns: 1fr; gap: 0; } }
 
 /* The ways to support ORQWA from other pages: the heart in the bar and menu, the strip on the home and download pages. */
 .nav a.support-link svg, .menu-nav a.support-link svg { fill: var(--heart); }
