@@ -15,6 +15,10 @@ import videoCourse from '../../orqwa-docs/images/readme/video-course.jpg';
 import groupWindow from '../../orqwa-docs/images/groups/window.jpg';
 import overlay from '../../orqwa-docs/images/readme/overlay.jpg';
 
+// The sample world is built outside the app repository, so its shots live here.
+import twannVineyards from '../assets/shots/twann-vineyards.jpg';
+import chasseralPlateau from '../assets/shots/chasseral-plateau.jpg';
+
 import courses from '../../orqwa-docs/images/app/courses.png';
 import course from '../../orqwa-docs/images/app/course.png';
 import workouts from '../../orqwa-docs/images/workouts/tab.png';
@@ -34,6 +38,8 @@ export interface Shot { src: ImageMetadata; alt: string; caption: string }
 /** Riding: the showcase of saved courses (seasons, weather, times of day, alone and in groups), then the features around it. */
 export const ridingShots: Shot[] = [
   { src: fujiEvening, alt: "Evening sun over the lake below Mount Fuji in ORQWA's 3D world", caption: 'Evening below Mount Fuji' },
+  { src: twannVineyards, alt: 'Climbing through the vineyards above Twann, with Lake Biel and the old village below', caption: 'Vineyards above Lake Biel' },
+  { src: chasseralPlateau, alt: 'Riding across open fields towards the Chasseral, its transmitter tower on the ridge ahead', caption: 'Towards the Chasseral' },
   { src: furkaGroup, alt: 'Climbing the Furka with friends, with the HUD and the list of riders', caption: 'Group ride up the Furka' },
   { src: wadaHairpins, alt: 'A group riding autumn hairpins in Japan, seen from above', caption: 'Autumn hairpins from above' },
   { src: scheideggWinter, alt: 'Riding down through a snowy forest below the Wetterhorn, with the HUD, the dark map and the coloured elevation profile', caption: 'Snowy descent from the Grosse Scheidegg' },

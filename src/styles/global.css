@@ -694,6 +694,9 @@ footer { border-top: 1px solid var(--line); padding-block: 48px 56px; color: var
 .ride-steps .h3 { min-height: 32px; display: flex; align-items: center; transition: color .35s ease; }
 .ride-steps p { color: var(--muted); font-size: 15.5px; }
 /* After the steps, help for whoever gets stuck. */
+/* Step 4's small pointer to the sample world at the bottom of the section. */
+.ride-steps .ride-more { justify-self: start; font-size: 14px; font-weight: 500; text-decoration: none; }
+.ride-steps .ride-more:hover { text-decoration: underline; }
 .ride .stuck { color: var(--muted); font-size: 15.5px; }
 .ride .stuck a { font-weight: 500; text-decoration: none; }
 .ride .stuck a:hover { text-decoration: underline; }
@@ -718,6 +721,15 @@ footer { border-top: 1px solid var(--line); padding-block: 48px 56px; color: var
   .ride-steps .h3 { font-size: 1.1rem; }
   .ride-steps p, .ride .stuck { font-size: 15px; }
 }
+
+/* After the first ride: the sample world to download, laid out like the download box above. */
+.sample-world { margin-top: var(--section-gap); }
+.sample-world .sec-head { gap: 10px; margin-bottom: 28px; }
+.sample-world .sec-head p { color: var(--muted); max-width: 60ch; }
+.sample-world .note { min-height: 0; }
+.sample-world .note a { font-weight: 500; text-decoration: none; }
+.sample-world .note a:hover { text-decoration: underline; }
+.sample-world-title { font-size: clamp(1.5rem, 2.6vw, 1.9rem); font-stretch: 88%; letter-spacing: -.015em; line-height: 1.2; }
 
 /* Timeline pills coloured like the diagram lines: blue online, green on your device, purple sync. */
 .timeline li.c-on::before { color: var(--accent-hi); border-color: rgba(46, 176, 255, .5); }
@@ -851,6 +863,14 @@ footer { border-top: 1px solid var(--line); padding-block: 48px 56px; color: var
 .way-tag.soon { background: rgba(154, 167, 186, .14); color: var(--muted); }
 .way .btn { align-self: stretch; justify-content: center; } /* full width, so every card ends on the same full-width row */
 .way > :last-child { margin-top: auto; }
+/* Side by side, the cards share their rows (icon, title, text, middle, button), so the tiers, the
+   QR code and the sample world's picture sit at the same height, centred in the same row. Only
+   where the QR code shows: without it the coffee card has a row fewer. */
+@media (min-width: 1000.02px) and (hover: hover) {
+  .way { display: grid; grid-row: span 5; grid-template-rows: subgrid; row-gap: 12px; }
+  .way > :is(.way-mid, .coffee-qr, .world-sample) { margin: 0; align-self: center; }
+}
+.way-mid { display: grid; gap: 14px; }
 .btn svg.heart { fill: currentColor; }
 /* GitHub Sponsors before it is approved: the button is shown but leads nowhere. */
 .btn[aria-disabled="true"], .btn[aria-disabled="true"]:hover { opacity: .45; cursor: not-allowed; transform: none; }
@@ -872,13 +892,11 @@ footer { border-top: 1px solid var(--line); padding-block: 48px 56px; color: var
 .tiers dt { font-weight: 600; font-variant-numeric: tabular-nums; }
 .tiers dd { margin: 0; color: var(--muted); }
 
-.sample { display: grid; gap: 6px; padding: 14px 16px; border-radius: 10px; background: var(--deep); border: 1px solid var(--line); color: var(--text); text-decoration: none; transition: border-color .2s, background .2s; }
-.sample:hover { color: var(--text); border-color: rgba(46, 176, 255, .45); background: rgba(46, 176, 255, .06); }
-.sample-name { font-weight: 600; font-size: 15.5px; }
-.sample-route { width: 100%; height: 64px; }
-.sample-route path { fill: none; stroke: var(--accent-hi); stroke-width: 60; stroke-linecap: round; stroke-linejoin: round; }
-.sample-stats { display: flex; gap: 14px; font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
-.sample-go { padding-top: 8px; margin-top: 2px; border-top: 1px solid var(--line); font-size: 15px; font-weight: 600; color: var(--accent-hi); }
+/* The Worlds card: a picture of the sample world in the middle, like the QR code beside it. */
+.world-sample { margin: auto 0; display: grid; gap: 8px; }
+.world-sample figcaption { font-size: 14px; color: var(--muted); text-align: center; font-variant-numeric: tabular-nums; }
+.world-shot { width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--line); }
+.btn-world svg { fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 
 .sup-block { display: grid; gap: 20px; padding-block: 0; } /* the page grid spaces them, not the global section padding */
 .sup-block > h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); text-align: center; }

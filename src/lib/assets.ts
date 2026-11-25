@@ -49,3 +49,10 @@ export const REPO_API = 'https://api.github.com/repos/ORQWA/ORQWA';
 /** Star counts as GitHub shows them: 987, 1.2k, 12k. */
 export const formatStars = (n: number) =>
   n < 1000 ? String(n) : `${(n / 1000).toFixed(n < 10000 ? 1 : 0).replace(/\.0$/, '')}k`;
+
+/** The free sample world, on its own release (never the latest one, which the app downloads
+ *  come from). The tag and file name stay the same for every version; see orqwa-worlds' README. */
+export const SAMPLE_WORLD = {
+  url: 'https://github.com/ORQWA/ORQWA/releases/download/sample-world/twann-chasseral.oqx',
+  size: 873039129,
+} as const;

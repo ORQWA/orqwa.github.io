@@ -1,9 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
-import { t, pageUrl, dateLocale, asset, type Lang } from '../i18n';
+import { t, pageUrl, asset, type Lang } from '../i18n';
 import { SPONSORS_URL, SPONSORS_OPEN, COFFEE_URL, TIERS, WEBSITE_TIER } from '../lib/support';
 import sponsorList from '../lib/sponsors.json';
-import firstCourse from '../lib/first-course.json';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -14,15 +13,6 @@ const dollars = (n: number) => T('$5 a month').replace('5', String(n));
 /** Sponsors from the website tier, added by hand when they want to be listed. */
 const sponsors = sponsorList as { name: string; url?: string }[];
 
-// The sample course drawn from above, on its side so it fits the card: the stored route runs down the page.
-const pts = firstCourse.route.map(([x, y]) => [y, -x]);
-const xs = pts.map((p) => p[0]), ys = pts.map((p) => p[1]);
-const [minX, minY] = [Math.min(...xs), Math.min(...ys)];
-const [w, h] = [Math.max(...xs) - minX, Math.max(...ys) - minY];
-const pad = 160;
-const routeBox = `${-pad} ${-pad} ${Math.round(w + pad * 2)} ${Math.round(h + pad * 2)}`;
-const routePath = 'M' + pts.map(([x, y]) => `${Math.round(x - minX)} ${Math.round(y - minY)}`).join('L');
-const km = (firstCourse.length_m / 1000).toLocaleString(dateLocale(lang), { maximumFractionDigits: 1 });
 ---
 <Base lang={lang} page="support" title={T('Support · ORQWA')}
   description={T('Ways to support ORQWA, the free indoor cycling app: GitHub Sponsors, Buy Me a Coffee and, soon, worlds.')}>
@@ -39,11 +29,13 @@ const km = (firstCourse.length_m / 1000).toLocaleString(dateLocale(lang), { maxi
           {!SPONSORS_OPEN && <span class="way-tag soon">{T('Coming soon')}</span>}
         </div>
         <h2 class="way-title">GitHub Sponsors</h2>
-        <p>{T('A monthly amount you choose, or a one-time gift. Steady support helps plan new features.')}</p>
-        <dl class="tiers">
-          {TIERS.map((tier) => <div><dt>{dollars(tier.amount)}</dt><dd>{T(tier.reward)}</dd></div>)}
-        </dl>
-        <p class="way-small">{T('Or give a one-time amount. Change or cancel any time.')}</p>
+        <p>{T('A monthly amount you choose. Steady support helps plan new features.')}</p>
+        <div class="way-mid">
+          <dl class="tiers">
+            {TIERS.map((tier) => <div><dt>{dollars(tier.amount)}</dt><dd>{T(tier.reward)}</dd></div>)}
+          </dl>
+          <p class="way-small">{T('Or give a one-time amount. Change or cancel any time.')}</p>
+        </div>
         {SPONSORS_OPEN
           ? <a class="btn btn-primary" href={SPONSORS_URL} {...ext}>
               <svg class="heart" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.3C1 8.4 3 4.5 6.8 4.5c2.1 0 3.6 1.2 5.2 3 1.6-1.8 3.1-3 5.2-3 3.8 0 5.8 3.9 4.4 7.2C19.5 16.4 12 21 12 21z"/></svg>
@@ -80,12 +72,14 @@ const km = (firstCourse.length_m / 1000).toLocaleString(dateLocale(lang), { maxi
           <span class="way-tag soon">{T('Coming soon')}</span>
         </div>
         <h2 class="way-title">{T('Worlds')}</h2>
-        <p>{T('Detailed routes to ride in 3D, and recorded videos of real rides to follow on your trainer. Sold for a small price, so every purchase supports ORQWA, and the app stays free.')}</p>
-        <a class="sample" href={pageUrl(lang, 'download', '#first-ride')}>
-          <span class="sample-name">Twann – Chasseral</span>
-          <svg class="sample-route" viewBox={routeBox} preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path d={routePath} /></svg>
-          <span class="sample-stats"><span>{km} km</span><span>{T('433 m to 1606 m').replace('433', String(firstCourse.start_m)).replace('1606', String(firstCourse.summit_m))}</span></span>
-          <span class="sample-go">{T('Get the sample world')}</span>
+        <p>{T('Detailed 3D routes and videos to buy. They help keep the app free.')}</p>
+        <figure class="world-sample">
+          <img class="world-shot" src={asset('media/sample-world.webp')} alt={T('Riding past the Chasseral transmitter tower in the sample world')} width="1000" height="611" loading="lazy" decoding="async">
+          <figcaption>{T('Free demo world: Twann – Chasseral')}</figcaption>
+        </figure>
+        <a class="btn btn-world" href={pageUrl(lang, 'download', '#sample-world')}>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10.5l5 5 5-5M5 19.5h14"/></svg>
+          {T('Get the sample world')}
         </a>
       </article>
     </div>
