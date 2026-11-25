@@ -148,6 +148,7 @@ const stars = await getStars();
           <a href={pageUrl(lang, 'privacy')} aria-current={here('privacy')}>{t(lang, 'Privacy')}</a>
         </nav>
       </div>
+      <p class="independent" set:html={t(lang, '<b>Written by AI, ridden at your own risk.</b> Every line of ORQWA is written by AI. There is no warranty, and we accept no liability for injury or for damage to your gear.')} />
       <p class="independent">{t(lang, 'ORQWA is an independent project. It is not affiliated with or endorsed by Zwift, Rouvy, MyWhoosh, TrainerRoad, Strava, intervals.icu, Garmin, Wahoo, Elite, Shimano or any other company or service. All names and trademarks belong to their owners.')}</p>
       <p class="copyright">© 2026 ORQWA · <a href="https://github.com/ORQWA/ORQWA/blob/main/LICENSE" {...ext}>{t(lang, 'Free software under the GNU GPL v3')}</a></p>
     </div>

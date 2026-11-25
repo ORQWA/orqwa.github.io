@@ -563,6 +563,7 @@ footer { border-top: 1px solid var(--line); padding-block: 48px 56px; color: var
 .foot nav a { color: var(--muted); text-decoration: none; }
 .foot nav a:hover { color: var(--text); }
 .independent { max-width: 88ch; margin: 40px auto 0; text-align: center; font-size: 13px; }
+.independent + .independent { margin-top: 12px; }
 .copyright { margin: 12px 0 0; text-align: center; font-size: 13px; }
 .copyright a { color: inherit; }
 .copyright a:hover { color: var(--text); }
