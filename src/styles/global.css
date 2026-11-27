@@ -256,6 +256,13 @@ section { padding-block: clamp(72px, 10vw, 140px) 0; scroll-margin-top: var(--ba
 /* A link at the end of a section's lede, like the guide links on the feature cards. */
 .sec-head .lede a { font-weight: 500; text-decoration: none; white-space: nowrap; }
 .sec-head .lede a:hover { text-decoration: underline; }
+.unsigned { display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; max-width: 72ch; margin-top: 8px; padding: 20px 22px; text-align: left;
+  border-radius: var(--r); border: 1px solid var(--line); background: linear-gradient(100deg, rgba(46, 176, 255, .10), rgba(46, 176, 255, .04)); }
+.unsigned-badge { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: rgba(46, 176, 255, .14); }
+.unsigned-badge svg { width: 20px; height: 20px; fill: var(--accent-hi); }
+.unsigned p { color: var(--muted); }
+.unsigned a { font-weight: 500; text-decoration: none; }
+.unsigned a:hover { text-decoration: underline; }
 .tabs { margin-inline: auto; }
 
 /* Screens: two reels as wide as the content column, each shot with a short highlight below.

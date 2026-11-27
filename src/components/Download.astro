@@ -85,6 +85,10 @@ const firstRide = [
     <div class="sec-head">
       <h1 id="dl-h" set:html={heading} />
       <p class="lede" set:html={released} />
+      <div class="unsigned">
+        <span class="unsigned-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 4 5.5v6c0 5 3.4 8.9 8 10 4.6-1.1 8-5 8-10v-6l-8-3zm-1 5h2v6h-2v-6zm0 8h2v2h-2v-2z"/></svg></span>
+        <p set:html={T('ORQWA is written entirely by AI, isn\'t signed by Apple or Microsoft and isn\'t on Google Play, which is why your system warns you. Install it only if you\'re comfortable with that. With enough <a href="/support">support</a>, we can pay for signing and publishing, and these warnings go away.').replace('/support', pageUrl(lang, 'support'))} />
+      </div>
     </div>
 
     <div class="tabs" role="tablist" aria-label={T('Platform')} id="tabs" data-yours={T('yours')}>
